@@ -8,8 +8,8 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MyPackage.Specs")]
 namespace MyPackage
 {
-    public class MyPackage
+    public class MyClass
     {
-        public MyPackage() { }
+        public MyClass() { }
     }
 }
