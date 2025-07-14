@@ -163,7 +163,7 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            PackageGuard($"--configpath={RootDirectory / "PackageGuard.config.json"} {RootDirectory}");
+            PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching {RootDirectory}");
         });
 
     Target GenerateCodeCoverageReport => _ => _
