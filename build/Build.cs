@@ -202,7 +202,7 @@ class Build : NukeBuild
             DotNetPack(s => s
                 .SetProject(Solution)
                 .SetOutputDirectory(ArtifactsDirectory)
-                .SetConfiguration(Configuration == Configuration.Debug ? "Debug" : "Release")
+                .SetConfiguration(Configuration)
                 .EnableNoBuild()
                 .EnableNoLogo()
                 .EnableNoRestore()

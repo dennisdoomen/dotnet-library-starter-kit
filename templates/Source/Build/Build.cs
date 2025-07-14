@@ -116,9 +116,10 @@ class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .EnableNoLogo()
                 .EnableNoRestore()
+				.SetVersion(SemVer)
                 .SetAssemblyVersion(GitVersion.AssemblySemVer)
                 .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion));
+                .SetInformationalVersion(GitVersion.InformationalVersion) );
         });
 
     Target RunTests => _ => _
@@ -152,7 +153,7 @@ class Build : NukeBuild
             var project = Solution.GetProject("MyPackage.ApiVerificationTests");
 
             DotNetTest(s => s
-                .SetConfiguration(Configuration == Configuration.Debug ? "Debug" : "Release")
+                .SetConfiguration(Configuration)
                 .SetProcessEnvironmentVariable("DOTNET_CLI_UI_LANGUAGE", "en-US")
                 .SetResultsDirectory(TestResultsDirectory)
                 .SetProjectFile(project)
@@ -235,7 +236,7 @@ class Build : NukeBuild
             DotNetPack(s => s
                 .SetProject(Solution.GetProject("MyPackage"))
                 .SetOutputDirectory(ArtifactsDirectory)
-                .SetConfiguration(Configuration == Configuration.Debug ? "Debug" : "Release")
+                .SetConfiguration(Configuration)
                 .EnableNoBuild()
                 .EnableNoLogo()
                 .EnableNoRestore()
