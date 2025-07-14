@@ -147,6 +147,9 @@ resharper_not_accessed_positional_property_global_highlighting = error
 # Do not remove redundant else blocks
 resharper_redundant_if_else_block_highlighting = none
 
+# If we use explicit property names in anonymous types, we do that on purpose.
+resharper_redundant_anonymous_type_property_name_highlighting = none
+
 ####################################################################
 ## Roslyn Analyzers and Code Fixes
 ####################################################################
