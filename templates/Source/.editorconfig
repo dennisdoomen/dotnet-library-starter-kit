@@ -131,6 +131,7 @@ csharp_space_between_square_brackets = false
 ####################################################################
 
 # Keep enough blank lines between code blocks to make it readable.
+resharper_blank_lines_before_multiline_statements = 1
 resharper_blank_lines_after_multiline_statements = 1
 resharper_blank_lines_around_single_line_auto_property = 1
 resharper_blank_lines_before_case = 1
