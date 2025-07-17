@@ -57,12 +57,12 @@
     "description": "NuGet-published source-only multi-targeting library with all the bells and whistles for Inner Sourcing",
     "shortName": "nooss-source-only-nuget-class-library-sln"
 {{~ else if !source_only && opensource ~}}
-    "identity": "DeDo.OssBinaryLibrary.Template",
+    "identity": "DeDo.OssSourceOnlyLibrary.Template",
     "name": "Class Library Binary NuGet OSS Solution",
     "description": "NuGet-published binary multi-targeting OSS library with all the bells and whistles",
     "shortName": "oss-binary-nuget-class-library-sln"
 {{~ else if source_only && opensource ~}}
-    "identity": "DeDo.NonOssBinaryLibrary.Template",
+    "identity": "DeDo.OssBinaryLibrary.Template",
     "name": "Class Library Source-Only NuGet OSS Solution",
     "description": "NuGet-published source-only multi-targeting OSS library with all the bells and whistles",
     "shortName": "oss-source-only-nuget-class-library-sln"
