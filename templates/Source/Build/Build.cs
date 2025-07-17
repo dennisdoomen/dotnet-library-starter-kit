@@ -58,6 +58,10 @@ class Build : NukeBuild
     [Secret]
     readonly string NugetArtifactsApiKey;
 
+    [Parameter("The key to use for scanning packages on GitHub")]
+    [Secret]
+    readonly string GitHubApiKey;
+
     [Solution(GenerateProjects = true)]
     readonly Solution Solution;
 
@@ -164,6 +168,7 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
+            Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
             PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching {RootDirectory}");
         });
 

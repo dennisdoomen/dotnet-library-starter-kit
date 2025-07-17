@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Nuke.Common;
-using Nuke.Common.CI.AzurePipelines.Configuration;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -30,6 +29,10 @@ class Build : NukeBuild
     [Parameter("The key to push to Nuget")]
     [Secret]
     readonly string NuGetApiKey;
+
+    [Parameter("The key to use for scanning packages on GitHub")]
+    [Secret]
+    readonly string GitHubApiKey;
 
     [Solution(GenerateProjects = true)]
     readonly Solution Solution;
@@ -140,7 +143,9 @@ class Build : NukeBuild
             {
                 var templateDirectory = ArtifactsDirectory / "templates" / name;
 
+
                 // We're running the build script in the templates/Normal directory to see if that works as expected
+                Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
                 PowerShellTasks.PowerShell("./build.ps1 Pack", workingDirectory: templateDirectory);
 
                 Assert.NotEmpty((templateDirectory / "Artifacts").GlobFiles("*.nupkg"));

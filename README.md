@@ -125,7 +125,8 @@ The template makes a lot of assumptions, so after generating the project, there'
 * Study the Nuke `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
 * See if all dependencies are up-to-date
 * Configure NuGet auditing (see next paragraph)
-* Check out the allowed open-source licenses and packages in the `PackageGuard.config.json`
+* Fine-tune the allowed open-source licenses and packages in the `.\packageguard\config.json`
+* Store the PackageGuard cache that appears under `.\packageguard` after a first build in source control to speed-up successive runs
 * Adjust the `funding.yml` to allow people to sponsor your project
 
 ## Additional things to be aware of
