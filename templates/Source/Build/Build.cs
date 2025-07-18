@@ -168,7 +168,7 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
+            Environment.SetEnvironmentVariable("GITHUB_API_KEY", GitHubApiKey);
             PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching {RootDirectory}");
         });
 

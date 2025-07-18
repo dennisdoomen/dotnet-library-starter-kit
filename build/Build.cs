@@ -143,10 +143,11 @@ class Build : NukeBuild
             {
                 var templateDirectory = ArtifactsDirectory / "templates" / name;
 
+                // Only include the ScanPackages step for the Normal template to speed up the build and avoid rate limiting issues
+                string additionalOption = name == "Normal" ? "" : " -skip ScanPackages";
 
-                // We're running the build script in the templates/Normal directory to see if that works as expected
                 Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
-                PowerShellTasks.PowerShell("./build.ps1 Pack", workingDirectory: templateDirectory);
+                PowerShellTasks.PowerShell($"./build.ps1 Pack {additionalOption}", workingDirectory: templateDirectory);
 
                 Assert.NotEmpty((templateDirectory / "Artifacts").GlobFiles("*.nupkg"));
             }
