@@ -139,29 +139,9 @@ class Build : NukeBuild
             }
         });
 
-    Target TestTemplateBuild => _ => _
-        .DependsOn(PrepareTemplateReadmes)
-        .Executes(() =>
-        {
-            string[] names = ["Normal", "SourceOnly", "NormalOss", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
-            foreach (string name in names)
-            {
-                var templateDirectory = ArtifactsDirectory / "templates" / name;
-
-                // Only include the ScanPackages step for the Normal template to speed up the build and avoid rate limiting issues
-                string additionalOption = name == "Normal" ? "" : " -skip ScanPackages";
-
-                Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
-                PowerShellTasks.PowerShell($"./build.ps1 Pack {additionalOption}", workingDirectory: templateDirectory);
-
-                Assert.NotEmpty((templateDirectory / "Artifacts").GlobFiles("*.nupkg"));
-            }
-        });
-
     Target Compile => _ => _
         .DependsOn(CalculateNugetVersion)
         .DependsOn(PrepareTemplateReadmes)
-        .DependsOn(TestTemplateBuild)
         .Executes(() =>
         {
             ReportSummary(s => s
@@ -221,8 +201,29 @@ class Build : NukeBuild
                 .SetVersion(SemVer));
         });
 
+    Target TestTemplateBuild => _ => _
+        .DependsOn(Pack)
+        .DependsOn(PrepareTemplateReadmes)
+        .Executes(() =>
+        {
+            string[] names = ["Normal", "SourceOnly", "NormalOss", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
+            foreach (string name in names)
+            {
+                var templateDirectory = ArtifactsDirectory / "templates" / name;
+
+                // Only include the ScanPackages step for the Normal template to speed up the build and avoid rate limiting issues
+                string additionalOption = name == "Normal" ? "" : " -skip ScanPackages";
+
+                Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
+                PowerShellTasks.PowerShell($"./build.ps1 Pack {additionalOption}", workingDirectory: templateDirectory);
+
+                Assert.NotEmpty((templateDirectory / "Artifacts").GlobFiles("*.nupkg"));
+            }
+        });
+
     Target Push => _ => _
         .DependsOn(Pack)
+        .DependsOn(TestTemplateBuild)
         .OnlyWhenDynamic(() => IsTag)
         .ProceedAfterFailure()
         .Executes(() =>

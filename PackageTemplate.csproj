@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Content Include="artifacts\templates\**\*"
-             Exclude="artifacts\templates\**\bin\**;artifacts\templates\**\obj\**;artifacts\templates\**\_ReSharper.Caches\**;artifacts\templates\**\.idea\**;artifacts\templates\**\.nuke\temp\**;artifacts\templates\**\Artifacts\**;artifacts\templates\**\TestResults\**;"
+             Exclude="artifacts\templates\**\bin\**;artifacts\templates\**\obj\**;artifacts\templates\**\_ReSharper.Caches\**;artifacts\templates\**\.idea\**;artifacts\templates\**\.nuke\temp\**;artifacts\templates\**\Artifacts\**;artifacts\templates\**\TestResults\**"
              PackagePath="content\templates\"
     />
     <Compile Remove="**\*" />
