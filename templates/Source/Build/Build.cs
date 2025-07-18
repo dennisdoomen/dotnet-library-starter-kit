@@ -238,6 +238,13 @@ class Build : NukeBuild
                 .WhenNotNull(SemVer, (c, semVer) => c
                     .AddPair("Packed version", semVer)));
 
+            // Because of limitations in the template package that was used to create this build script,
+            // we need to rename the nuspec files back to .nuspec files.
+            RootDirectory.GlobFiles("**/nuspec").ForEach(p =>
+            {
+                p.Rename(".nuspec", ExistsPolicy.FileOverwrite);
+            });
+
             DotNetPack(s => s
                 .SetProject(Solution.GetProject("MyPackage"))
                 .SetOutputDirectory(ArtifactsDirectory)
