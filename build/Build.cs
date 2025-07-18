@@ -84,16 +84,21 @@ class Build : NukeBuild
                 var template = Template.Parse(content, file);
 
                 AbsolutePath templateDirectory = ArtifactsDirectory / "templates";
-                template.RenderToFileIfNotEmpty(templateDirectory / "Normal" / relativePathTo, new {});
-
-                template.RenderToFileIfNotEmpty(templateDirectory / "SourceOnly" / relativePathTo, new
+                template.RenderToFileIfNotEmpty(templateDirectory / "Normal" / relativePathTo, new
                 {
-                    SourceOnly = true
+                    SourceOnly = false,
+                    OpenSource = false,
                 });
 
                 template.RenderToFileIfNotEmpty(templateDirectory / "NormalOss" / relativePathTo, new
                 {
+                    SourceOnly = false,
                     OpenSource = true
+                });
+
+                template.RenderToFileIfNotEmpty(templateDirectory / "SourceOnly" / relativePathTo, new
+                {
+                    SourceOnly = true
                 });
 
                 template.RenderToFileIfNotEmpty(templateDirectory / "SourceOnlyOss" / relativePathTo, new
