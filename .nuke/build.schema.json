@@ -32,6 +32,7 @@
         "PrepareTemplateReadmes",
         "PrepareTemplates",
         "Push",
+        "TestPackageInstallation",
         "TestTemplateBuild"
       ]
     },
