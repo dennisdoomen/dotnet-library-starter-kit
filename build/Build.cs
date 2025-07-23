@@ -161,6 +161,8 @@ class Build : NukeBuild
     Target PreparePackageReadme => _ => _
         .Executes(() =>
         {
+            ArtifactsDirectory.CreateOrCleanDirectory();
+
             var content = (RootDirectory / "README.md").ReadAllText();
             var sections = content.Split(["\n## "], StringSplitOptions.RemoveEmptyEntries);
 
@@ -207,7 +209,7 @@ class Build : NukeBuild
         {
             var packageFile = ArtifactsDirectory.GlobFiles("*.nupkg").OrderByDescending(x => x.ToString()).First();
             var testDirectory = RootDirectory / "temp" / "test-installation";
-            
+
             try
             {
                 // Clean up any previous test directory
@@ -215,24 +217,24 @@ class Build : NukeBuild
                 testDirectory.CreateDirectory();
 
                 Information("Installing package: {Package}", packageFile);
-                
+
                 // First, try to uninstall any existing package with the same name
                 try
                 {
-                    DotNet($"new uninstall DotNetLibraryPackageTemplates", workingDirectory: testDirectory);
+                    DotNet($"new uninstall DotNetLibraryPackageTemplates", workingDirectory: testDirectory, logOutput: false);
                 }
                 catch
                 {
                     // Ignore errors if the package isn't installed
                 }
-                
+
                 // Install the locally built package with force flag
                 DotNet($"new install {packageFile} --force", workingDirectory: testDirectory);
 
                 // Test each template variant by creating and building a test project
                 string[] templateShortNames = [
                     "nooss-nuget-class-library-sln",
-                    "nooss-source-only-nuget-class-library-sln", 
+                    "nooss-source-only-nuget-class-library-sln",
                     "oss-nuget-class-library-sln",
                     "oss-source-only-nuget-class-library-sln"
                 ];
@@ -241,39 +243,31 @@ class Build : NukeBuild
                 {
                     var projectTestDirectory = testDirectory / $"test-{templateName}";
                     projectTestDirectory.CreateDirectory();
-                    
+
                     Information("Testing template: {Template}", templateName);
-                    
+
                     // Create project from template
                     DotNet($"new {templateName} --name TestLibrary --force", workingDirectory: projectTestDirectory);
-                    
+
                     // Build the generated project to ensure it compiles without errors
                     // Note: template uses preferNameDirectory=true, so project is created in TestLibrary subdirectory
                     var actualProjectDirectory = projectTestDirectory / "TestLibrary";
-                    
-                    try
+
+                    DotNet("build", workingDirectory: actualProjectDirectory);
+                    Information("Successfully built project from template: {Template}", templateName);
+
+                    // Check if the basic project structure was created correctly
+                    if ((actualProjectDirectory / $"TestLibrary.sln").FileExists() ||
+                        (actualProjectDirectory / $"TestLibrary").DirectoryExists())
                     {
-                        DotNet("build", workingDirectory: actualProjectDirectory);
-                        Information("Successfully built project from template: {Template}", templateName);
+                        Information("Project structure was created successfully for template: {Template}", templateName);
                     }
-                    catch (Exception e)
+                    else
                     {
-                        Warning("Build failed for template {Template} (this may be due to environment-specific issues): {Error}", 
-                                templateName, e.Message);
-                        
-                        // Check if the basic project structure was created correctly
-                        if ((actualProjectDirectory / $"TestLibrary.sln").FileExists() ||
-                            (actualProjectDirectory / $"TestLibrary").DirectoryExists())
-                        {
-                            Information("Project structure was created successfully for template: {Template}", templateName);
-                        }
-                        else
-                        {
-                            throw new Exception($"Template {templateName} failed to create proper project structure");
-                        }
+                        Error($"Template {templateName} failed to create proper project structure");
                     }
                 }
-                
+
                 Information("All template installations and builds completed successfully");
             }
             finally
@@ -288,7 +282,7 @@ class Build : NukeBuild
                 {
                     Warning("Failed to uninstall package DotNetLibraryPackageTemplates: {Error}", e.Message);
                 }
-                
+
                 testDirectory.DeleteDirectory();
             }
         });
