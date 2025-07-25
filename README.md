@@ -144,8 +144,7 @@ By default, a `dotnet restore` will also check the NuGet packages [for any vulne
 
 ### About API verification
 
-The `ApiVerificationTests` will generate a `.txt` file containing a representation (per target framework) of the public API of your library. It's a nice technique to prevent accidentally introducing breaking changes. So, whenever the structure of your API changes compared to the snapshot stored in the `ApprovedApi` folder, the test will fail.
-You can then use `AcceptApiChanges.ps1` to update the snapshots and make the test succeed again.
+The `ApiVerificationTests` will generate a `.txt` file containing a representation (per target framework) of the public API of your library. It's a nice technique to prevent accidentally introducing breaking changes. So, whenever the structure of your API changes compared to the snapshot stored in the `ApprovedApi` folder, the test will fail. You can then use `AcceptApiChanges.ps1` to update the snapshots and make the test succeed again. Alternatively, you can install the plug-in [Verify Support](https://plugins.jetbrains.com/plugin/17240-verify-support) by Matthias Koch to do this from inside [JetBrains Rider](https://www.jetbrains.com/rider/) or [ReSharper](https://www.jetbrains.com/resharper/). 
 
 ## Building
 
