@@ -77,6 +77,9 @@ class Build : NukeBuild
     [NuGetPackage("PackageGuard", "PackageGuard.dll")]
     Tool PackageGuard;
 
+    [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
+    Tool InspectCode;
+
     string SemVer;
 
     Target CalculateNugetVersion => _ => _
@@ -126,8 +129,15 @@ class Build : NukeBuild
                 .SetInformationalVersion(GitVersion.InformationalVersion) );
         });
 
-    Target RunTests => _ => _
+    Target RunInspectCode => _ => _
         .DependsOn(Compile)
+        .Executes(() =>
+        {
+            InspectCode($"MyPackage.sln -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
+        });
+
+    Target RunTests => _ => _
+        .DependsOn(Compile, RunInspectCode)
         .Executes(() =>
         {
             TestResultsDirectory.CreateOrCleanDirectory();
