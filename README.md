@@ -112,27 +112,7 @@ You can update the templates using the following command.
 
 ### What to do after that
 
-The template makes a lot of assumptions, so after generating the project, there's a couple of things you can tweak.
-
-* Update the `Readme.md` and `PackageReadme.md` with information about your library
-* Review the guidelines in `CONTRIBUTING.md` to see if it aligns with how you want to handle contributions
-* Review the issue templates under `.github/issue_template`
-* Adjust the .NET frameworks this library should target
-* Adjust the root namespace and assembly names
-* For the source-only packages, update the `.nuspec` file so it represents your information.
-* Set-up labels in GitHub matching those in the `release.yml` so you can label pull requests accordingly
-* Alter the coverage service that is being used.
-* Determine if you want to use API verification against snapshots
-* Study the Nuke `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
-* See if all dependencies are up-to-date
-* Configure NuGet auditing (see next paragraph)
-* Fine-tune the allowed open-source licenses and packages in the `.\packageguard\config.json`
-* Store the PackageGuard cache that appears under `.\packageguard` after a first build in source control to speed-up successive runs
-* Adjust the `funding.yml` to allow people to sponsor your project
-
-> [!NOTE]
-> Before the first time the build script has run on your new solution, the `.nuspec` file is still called `nuspec`. This was needed because `dotnet pack` refuses to include the `.nuspec` file in the template package this repository produces. This file is automatically renamed after the first time the `build.ps1` script is run. 
-
+The generated solution contains a read-me that provides additional tips to get started. 
 
 ## Additional things to be aware of
 
