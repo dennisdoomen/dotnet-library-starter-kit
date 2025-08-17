@@ -13,10 +13,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="artifacts\templates\**\*"
-             Exclude="artifacts\templates\**\bin\**;artifacts\templates\**\obj\**;artifacts\templates\**\_ReSharper.Caches\**;artifacts\templates\**\.idea\**;artifacts\templates\**\.nuke\temp\**;artifacts\templates\**\Artifacts\**;artifacts\templates\**\TestResults\**"
-             PackagePath="content\templates\"
-    />
+    <Content Include="artifacts\templates\Normal\**\*" 
+             Exclude="artifacts\templates\Normal\**\bin\**;artifacts\templates\Normal\**\obj\**;artifacts\templates\Normal\**\_ReSharper.Caches\**;artifacts\templates\Normal\**\.idea\**;artifacts\templates\Normal\**\.nuke\temp\**;artifacts\templates\Normal\**\Artifacts\**;artifacts\templates\Normal\**\TestResults\**"
+             PackagePath="content\Normal" />
+    <Content Include="artifacts\templates\SourceOnly\**\*"
+             Exclude="artifacts\templates\SourceOnly\**\bin\**;artifacts\templates\SourceOnly\**\obj\**;artifacts\templates\SourceOnly\**\_ReSharper.Caches\**;artifacts\templates\SourceOnly\**\.idea\**;artifacts\templates\SourceOnly\**\.nuke\temp\**;artifacts\templates\SourceOnly\**\Artifacts\**;artifacts\templates\SourceOnly\**\TestResults\**"
+             PackagePath="content\SourceOnly" />
+    <Content Include="artifacts\templates\NormalOss\**\*"
+             Exclude="artifacts\templates\NormalOss\**\bin\**;artifacts\templates\NormalOss\**\obj\**;artifacts\templates\NormalOss\**\_ReSharper.Caches\**;artifacts\templates\NormalOss\**\.idea\**;artifacts\templates\NormalOss\**\.nuke\temp\**;artifacts\templates\NormalOss\**\Artifacts\**;artifacts\templates\NormalOss\**\TestResults\**"
+             PackagePath="content\NormalOss" />
+    <Content Include="artifacts\templates\SourceOnlyOss\**\*"
+             Exclude="artifacts\templates\SourceOnlyOss\**\bin\**;artifacts\templates\SourceOnlyOss\**\obj\**;artifacts\templates\SourceOnlyOss\**\_ReSharper.Caches\**;artifacts\templates\SourceOnlyOss\**\.idea\**;artifacts\templates\SourceOnlyOss\**\.nuke\temp\**;artifacts\templates\SourceOnlyOss\**\Artifacts\**;artifacts\templates\SourceOnlyOss\**\TestResults\**"
+             PackagePath="content\SourceOnlyOss" />
+    <Content Include="artifacts\templates\NormalAzdo\**\*"
+             Exclude="artifacts\templates\NormalAzdo\**\bin\**;artifacts\templates\NormalAzdo\**\obj\**;artifacts\templates\NormalAzdo\**\_ReSharper.Caches\**;artifacts\templates\NormalAzdo\**\.idea\**;artifacts\templates\NormalAzdo\**\.nuke\temp\**;artifacts\templates\NormalAzdo\**\Artifacts\**;artifacts\templates\NormalAzdo\**\TestResults\**"
+             PackagePath="content\NormalAzdo" />
+    <Content Include="artifacts\templates\SourceOnlyAzdo\**\*"
+             Exclude="artifacts\templates\SourceOnlyAzdo\**\bin\**;artifacts\templates\SourceOnlyAzdo\**\obj\**;artifacts\templates\SourceOnlyAzdo\**\_ReSharper.Caches\**;artifacts\templates\SourceOnlyAzdo\**\.idea\**;artifacts\templates\SourceOnlyAzdo\**\.nuke\temp\**;artifacts\templates\SourceOnlyAzdo\**\Artifacts\**;artifacts\templates\SourceOnlyAzdo\**\TestResults\**"
+             PackagePath="content\SourceOnlyAzdo" />
     <Compile Remove="**\*" />
     <Content Include="artifacts/Readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>

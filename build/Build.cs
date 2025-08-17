@@ -53,16 +53,16 @@ class Build : NukeBuild
     Target CalculateNugetVersion => _ => _
         .Executes(() =>
         {
-            SemVer = GitVersion.SemVer;
+            SemVer = GitVersion?.SemVer ?? "1.0.0-dev";
             if (IsPullRequest)
             {
                 Information(
                     "Branch spec {branchspec} is a pull request. Adding build number {buildnumber}",
                     BranchSpec, BuildNumber);
 
-                SemVer = string.Join('.', GitVersion.SemVer.Split('.').Take(3).Union(new[]
+                SemVer = string.Join('.', SemVer.Split('.').Take(3).Union(new[]
                 {
-                    BuildNumber
+                    BuildNumber ?? "0"
                 }));
             }
 
@@ -153,14 +153,16 @@ class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .EnableNoLogo()
                 .EnableNoCache()
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion));
+                .SetAssemblyVersion(GitVersion?.AssemblySemVer ?? "1.0.0.0")
+                .SetFileVersion(GitVersion?.AssemblySemFileVer ?? "1.0.0.0")
+                .SetInformationalVersion(GitVersion?.InformationalVersion ?? SemVer));
         });
 
     Target PreparePackageReadme => _ => _
         .Executes(() =>
         {
+            ArtifactsDirectory.CreateOrCleanDirectory();
+
             var content = (RootDirectory / "README.md").ReadAllText();
             var sections = content.Split(["\n## "], StringSplitOptions.RemoveEmptyEntries);
 
@@ -201,6 +203,90 @@ class Build : NukeBuild
                 .SetVersion(SemVer));
         });
 
+    Target TestPackageInstallation => _ => _
+        .DependsOn(Pack)
+        .Executes(() =>
+        {
+            var packageFile = ArtifactsDirectory.GlobFiles("*.nupkg").OrderByDescending(x => x.ToString()).First();
+            var testDirectory = RootDirectory / "temp" / "test-installation";
+
+            try
+            {
+                // Clean up any previous test directory
+                testDirectory.DeleteDirectory();
+                testDirectory.CreateDirectory();
+
+                Information("Installing package: {Package}", packageFile);
+
+                // First, try to uninstall any existing package with the same name
+                try
+                {
+                    DotNet($"new uninstall DotNetLibraryPackageTemplates", workingDirectory: testDirectory, logOutput: false);
+                }
+                catch
+                {
+                    // Ignore errors if the package isn't installed
+                }
+
+                // Install the locally built package with force flag
+                DotNet($"new install {packageFile} --force", workingDirectory: testDirectory);
+
+                // Test each template variant by creating and building a test project
+                string[] templateShortNames = [
+                    "nooss-nuget-class-library-sln",
+                    "nooss-source-only-nuget-class-library-sln",
+                    "oss-nuget-class-library-sln",
+                    "oss-source-only-nuget-class-library-sln"
+                ];
+
+                foreach (string templateName in templateShortNames)
+                {
+                    var projectTestDirectory = testDirectory / $"test-{templateName}";
+                    projectTestDirectory.CreateDirectory();
+
+                    Information("Testing template: {Template}", templateName);
+
+                    // Create project from template
+                    DotNet($"new {templateName} --name TestLibrary --force", workingDirectory: projectTestDirectory);
+
+                    // Build the generated project to ensure it compiles without errors
+                    // Note: template uses preferNameDirectory=true, so project is created in TestLibrary subdirectory
+                    var actualProjectDirectory = projectTestDirectory / "TestLibrary";
+
+                    DotNet("build", workingDirectory: actualProjectDirectory);
+                    Information("Successfully built project from template: {Template}", templateName);
+
+                    // Check if the basic project structure was created correctly
+                    if ((actualProjectDirectory / $"TestLibrary.sln").FileExists() ||
+                        (actualProjectDirectory / $"TestLibrary").DirectoryExists())
+                    {
+                        Information("Project structure was created successfully for template: {Template}", templateName);
+                    }
+                    else
+                    {
+                        Error($"Template {templateName} failed to create proper project structure");
+                    }
+                }
+
+                Information("All template installations and builds completed successfully");
+            }
+            finally
+            {
+                // Clean up: uninstall the package and remove test directory
+                try
+                {
+                    DotNet($"new uninstall DotNetLibraryPackageTemplates");
+                    Information("Uninstalled package: DotNetLibraryPackageTemplates");
+                }
+                catch (Exception e)
+                {
+                    Warning("Failed to uninstall package DotNetLibraryPackageTemplates: {Error}", e.Message);
+                }
+
+                testDirectory.DeleteDirectory();
+            }
+        });
+
     Target TestTemplateBuild => _ => _
         .DependsOn(Pack)
         .DependsOn(PrepareTemplateReadmes)
@@ -223,6 +309,7 @@ class Build : NukeBuild
 
     Target Push => _ => _
         .DependsOn(Pack)
+        .DependsOn(TestPackageInstallation)
         .DependsOn(TestTemplateBuild)
         .OnlyWhenDynamic(() => IsTag)
         .ProceedAfterFailure()
