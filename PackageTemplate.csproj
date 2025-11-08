@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="artifacts\templates\Normal\**\*" 
+    <Content Include="artifacts\templates\Normal\**\*"
              Exclude="artifacts\templates\Normal\**\bin\**;artifacts\templates\Normal\**\obj\**;artifacts\templates\Normal\**\_ReSharper.Caches\**;artifacts\templates\Normal\**\.idea\**;artifacts\templates\Normal\**\.nuke\temp\**;artifacts\templates\Normal\**\Artifacts\**;artifacts\templates\Normal\**\TestResults\**"
              PackagePath="content\Normal" />
     <Content Include="artifacts\templates\SourceOnly\**\*"
@@ -45,10 +45,10 @@
     <Description>A bunch of "dotnet new" solution templates for building high-quality binary and source-only packages inspired by Fluent Assertions.</Description>
     <PackageTags>c#;.net;template;nuget</PackageTags>
     <PackageCopyright>Dennis Doomen 2025</PackageCopyright>
-    <PackageProjectUrl>https://github.com/dennisdoomen/dotnet-package-templates</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/dennisdoomen/dotnet-library-starter-kit</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/dennisdoomen/dotnet-package-templates</RepositoryUrl>
+    <RepositoryUrl>https://github.com/dennisdoomen/dotnet-library-starter-kit</RepositoryUrl>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
   </PropertyGroup>
 </Project>
