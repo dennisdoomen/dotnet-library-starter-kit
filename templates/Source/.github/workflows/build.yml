@@ -53,6 +53,19 @@ jobs:
       with:
         sarif_file: Artifacts/CodeIssues.sarif
 
+    - name: Check for NuGet package existence
+      id: check_nupkg
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: andstor/file-existence-action@v3
+      with:
+        files: "Artifacts/*.nupkg"
+
+    - name: Attest NuGet package
+      uses: actions/attest-build-provenance@v2
+      if: startsWith(github.ref, 'refs/tags/') && steps.check_nupkg.outputs.files_exists == 'true'
+      with:
+        subject-path: ./Artifacts/*.nupkg
+
     - name: Upload artifacts
       if: always()
       uses: actions/upload-artifact@v4
