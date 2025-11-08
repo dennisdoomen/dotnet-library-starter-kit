@@ -3,7 +3,8 @@
     "author": "Dennis Doomen",
     "classifications": [ "NuGet Package", "Class Library", "Solution Template" ],
     "tags": {
-      "language": "C#"
+      "language": "C#",
+      "type": "solution"
     },
     "sourceName": "MyPackage",
     "preferNameDirectory": true,
@@ -13,7 +14,10 @@
           {
             "exclude": [ "src/.idea/**", ".template_config/**" ]
           }
-        ]
+        ],
+        "source": "./",
+        "target": "./",
+        "copyOnly": [ "**/*.cs" ]
       }
     ],
 {{~ if azdo ~}}
