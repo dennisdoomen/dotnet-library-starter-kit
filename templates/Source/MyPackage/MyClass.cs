@@ -9,6 +9,9 @@
 {{~ end -}}
 namespace MyPackage;
 
+{{~ if source_only ~}}
+[global::System.Diagnostics.DebuggerNonUserCode]
+{{~ end ~}}
 public class MyClass
 {
 }
