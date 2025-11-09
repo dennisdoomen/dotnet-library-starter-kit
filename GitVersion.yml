@@ -9,10 +9,8 @@ branches:
     label: rc
     increment: Patch
   pull-request:
-    mode: ContinuousDelivery
-    regex: ((pull|pull\-requests|pr)[/-]|[/-](merge))
-    label: pr
-    label-number-pattern: '[/-]?(?<number>\d+)'
+    regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
+    label: pr{Number}
     prevent-increment:
       of-merged-branch: false
 ignore:

@@ -6,5 +6,7 @@ branches:
     prevent-increment:
       when-current-commit-tagged: true
   pull-request:
-    regex: ((pull|pull\-requests|pr)[/-]|[/-](merge))
-    label: pr
+    regex: ^(pull-requests|pull|pr)[\/-](?<Number>\d*)
+    label: pr{Number}
+    prevent-increment:
+      of-merged-branch: false

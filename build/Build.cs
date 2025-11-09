@@ -53,16 +53,16 @@ class Build : NukeBuild
     Target CalculateNugetVersion => _ => _
         .Executes(() =>
         {
-            SemVer = GitVersion?.SemVer ?? "1.0.0-dev";
+            SemVer = GitVersion.SemVer;
             if (IsPullRequest)
             {
                 Information(
                     "Branch spec {branchspec} is a pull request. Adding build number {buildnumber}",
                     BranchSpec, BuildNumber);
 
-                SemVer = string.Join('.', SemVer.Split('.').Take(3).Union(new[]
+                SemVer = string.Join('.', GitVersion.SemVer.Split('.').Take(3).Union(new[]
                 {
-                    BuildNumber ?? "0"
+                    BuildNumber
                 }));
             }
 
@@ -153,9 +153,9 @@ class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .EnableNoLogo()
                 .EnableNoCache()
-                .SetAssemblyVersion(GitVersion?.AssemblySemVer ?? "1.0.0.0")
-                .SetFileVersion(GitVersion?.AssemblySemFileVer ?? "1.0.0.0")
-                .SetInformationalVersion(GitVersion?.InformationalVersion ?? SemVer));
+                .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                .SetFileVersion(GitVersion.AssemblySemFileVer)
+                .SetInformationalVersion(GitVersion.InformationalVersion));
         });
 
     Target PreparePackageReadme => _ => _
