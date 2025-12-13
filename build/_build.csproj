@@ -14,9 +14,9 @@
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="9.0.4" />
     <PackageReference Include="Nuke.Components" Version="9.0.4" />
-    <PackageDownload Include="ReportGenerator" Version="[5.2.0]" />
+    <PackageDownload Include="ReportGenerator" Version="[5.5.1]" />
     <PackageDownload Include="GitVersion.Tool" Version="[6.5.0]" />
-    <PackageReference Include="Scriban" Version="6.5.0" />
+    <PackageReference Include="Scriban" Version="6.5.2" />
   </ItemGroup>
 
 </Project>
