@@ -67,7 +67,7 @@ This is the result of years of experience in building in-house and open-source l
 **Tip** You can also use this as a starting point for a [GitHub Template Repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository), fork and adapt the repository for your own company, or use it as an organization template in Azure DevOps.
 
 ### Who created this?
-My name is Dennis Doomen and I'm a Microsoft MVP and Principal Consultant at [Aviva Solutions](https://avivasolutions.nl/) with 29 years of experience under my belt. As a coding architect, I specialize in designing full-stack enterprise solutions based on .NET as well as providing coaching on all aspects of designing, building, deploying and maintaining software systems. I'm the author of several open-source projects such as [Fluent Assertions](https://www.fluentassertions.com), [Reflectify](https://github.com/dennisdoomen/reflectify), [Liquid Projections](https://www.liquidprojections.net), and I've been maintaining [coding guidelines for C#](https://www.csharpcodingguidelines.com) since 2001.
+My name is Dennis Doomen and I'm a Microsoft MVP and Principal Consultant at [Aviva Solutions](https://avivasolutions.nl/) with three decades of experience under my belt. As a coding architect, I specialize in designing full-stack enterprise solutions based on .NET as well as providing coaching on all aspects of designing, building, deploying and maintaining software systems. I'm the author of several open-source projects such as [Fluent Assertions](https://www.fluentassertions.com), [Mockly](https://github.com/dennisdoomen/mockly), [Reflectify](https://github.com/dennisdoomen/reflectify), [Liquid Projections](https://www.liquidprojections.net), and I've been maintaining [coding guidelines for C#](https://www.csharpcodingguidelines.com) since 2001.
 
 Contact me through [Email](mailto:dennis.doomen@avivasolutions.nl), [Bluesky](https://bsky.app/profile/dennisdoomen.com), [Twitter/X](https://twitter.com/ddoomen) or [Mastadon](https://mastodon.social/@ddoomen)
 
@@ -183,6 +183,7 @@ This library wouldn't have been possible without the following tools, packages a
 
 * [My Blog](https://www.dennisdoomen.com)
 * [FluentAssertions](https://github.com/fluentassertions/fluentassertions) - Extension methods to fluently assert the outcome of .NET tests
+* [Mockly](https://github.com/dennisdoomen/mockly) - Fluent HTTP mocking for .NET like it should have been done
 * [PackageGuard](https://github.com/dennisdoomen/packageguard?tab=readme-ov-file#readme) - Get a grip on your open-source packages
 * [Reflectify](https://github.com/dennisdoomen/reflectify?tab=readme-ov-file#readme) - Reflection extensions without causing dependency pains
 * [Pathy](https://github.com/dennisdoomen/pathy?tab=readme-ov-file#readme) - Fluently building and using file and directory paths without binary dependencies

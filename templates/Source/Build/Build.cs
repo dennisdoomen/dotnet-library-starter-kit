@@ -70,7 +70,7 @@ class Build : NukeBuild
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "Artifacts";
 
-    AbsolutePath TestResultsDirectory => ArtifactsDirectory / "TestResults";
+    AbsolutePath TestResultsDirectory => RootDirectory / "TestResults";
 
     AbsolutePath CoverageResultsFile => TestResultsDirectory / "Cobertura.xml";
 
