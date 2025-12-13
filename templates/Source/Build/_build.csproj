@@ -14,10 +14,10 @@
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="9.0.4" />
     <PackageReference Include="Nuke.Components" Version="9.0.4" />
-    <PackageDownload Include="ReportGenerator" Version="[5.4.18]" />
+    <PackageDownload Include="ReportGenerator" Version="[5.5.1]" />
     <PackageDownload Include="GitVersion.Tool" Version="[6.5.0]" />
     <PackageDownload Include="PackageGuard" Version="[2.0.0]" />
-    <PackageDownload Include="JetBrains.ReSharper.GlobalTools" Version="[2025.2.4]" />
+    <PackageDownload Include="JetBrains.ReSharper.GlobalTools" Version="[2025.3.0.3]" />
   </ItemGroup>
 
 </Project>
