@@ -236,8 +236,31 @@ class Build : NukeBuild
         });
 {{~ end ~}}
 
+    Target PreparePackageReadme => _ => _
+        .Executes(() =>
+        {
+            var content = (RootDirectory / "README.md").ReadAllText();
+            var sections = content.Split(["\n## "], StringSplitOptions.RemoveEmptyEntries);
+
+            string[] headersToInclude =
+            [
+                "About",
+                "How do I use it",
+                "Quick Start",
+                "Additional notes",
+                "Versioning",
+                "Credits"
+            ];
+
+            var readmeContent = "## " + string.Join("\n## ", sections
+                .Where(section => headersToInclude.Any(header => section.StartsWith(header, StringComparison.OrdinalIgnoreCase))));
+
+            (ArtifactsDirectory / "Readme.md").WriteAllText(readmeContent);
+        });
+
     Target Pack => _ => _
         .DependsOn(ScanPackages)
+        .DependsOn(PreparePackageReadme)
         .DependsOn(CalculateNugetVersion)
         .DependsOn(ApiChecks)
         .DependsOn(GenerateCodeCoverageReport)
