@@ -5,6 +5,8 @@ on:
   push:
       branches:
         - 'main'
+        - 'develop'
+        - 'release/**'
       tags:
         - '*'
   pull_request:
@@ -17,13 +19,20 @@ jobs:
     env:
       DOTNET_NOLOGO: false
 
+    permissions:
+      id-token: write
+      attestations: write
+      contents: write
+      security-events: write
+      actions: write
+
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
     - name: Setup .NET SDKs
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
           3.0.x
@@ -49,7 +58,7 @@ jobs:
         file: TestResults/reports/lcov.info
 
     - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: Artifacts/CodeIssues.sarif
 
@@ -61,14 +70,14 @@ jobs:
         files: "Artifacts/*.nupkg"
 
     - name: Attest NuGet package
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       if: startsWith(github.ref, 'refs/tags/') && steps.check_nupkg.outputs.files_exists == 'true'
       with:
         subject-path: ./Artifacts/*.nupkg
 
     - name: Upload artifacts
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: windows-artifacts
         path: |
@@ -86,7 +95,7 @@ jobs:
 
     steps:
     - name: Download Artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         path: artifacts
 
