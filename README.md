@@ -75,11 +75,15 @@ Contact me through [Email](mailto:dennis.doomen@avivasolutions.nl), [Bluesky](ht
 
 This repository is available as [a NuGet package](https://www.nuget.org/packages/DotNetLibraryPackageTemplates) on https://nuget.org. To install it, use the following command-line:
 
-`dotnet new install DotNetLibraryPackageTemplates`
+```
+dotnet new install DotNetLibraryPackageTemplates
+```
 
 You can update the templates using the following command.
 
-`dotnet new update`
+```
+dotnet new update
+```
 
 ## How do I use it?
 
