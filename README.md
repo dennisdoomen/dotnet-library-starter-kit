@@ -92,23 +92,35 @@ dotnet new update
 1. Create a new directory for your library initialized with Git
 1. Run the following command to start building an internal library for GitHub
 
-    `dotnet new nooss-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary`
+   ```
+   dotnet new nooss-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary
+   ```
 
     Or, if you prefer to build a NuGet package that only adds source files to a project (and avoids binary dependencies)
 
-    `dotnet new nooss-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary`
+    ```
+   dotnet new nooss-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary
+    ```
 
     Or, if you want to build an open-source packages, use either of the following
 
-    `dotnet new oss-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary`
+    ```
+   dotnet new oss-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary
+    ```
 
-    `dotnet new oss-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary`
+    ```
+   dotnet new oss-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary
+    ```
 
     If you are still using Azure DevOps, we got you covered, but you need the organization and project names as well. Again, choose between a binary package or a source-only package.
 
-    `dotnet new azdo-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject` 
+    ```
+   dotnet new azdo-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
+    ```
 
-    `dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject`
+    ```
+   dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
+    ```
 
 1. Make the necessary changes to the generated code (see next section)
 1. Commit the changes to your repository into a new commit. Without it, the build script will crash on generating the version number.
