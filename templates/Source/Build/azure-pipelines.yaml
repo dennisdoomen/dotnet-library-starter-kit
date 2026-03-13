@@ -1,0 +1,35 @@
+{{~ if azdo ~}}
+pr:
+  - main
+
+trigger:
+  branches:
+    include:
+      - main
+  tags:
+    include:
+      - "*"
+
+pool:
+  vmImage: windows-latest
+
+stages:
+  - stage: build
+    displayName: "Build, Pack and Push to Feed"
+    jobs:
+      - job:
+        workspace:
+          clean: all
+        timeoutInMinutes: 10 # how long to run the job before automatically cancelling
+        cancelTimeoutInMinutes: 1 # how much time to give 'run always even if cancelled tasks' before stopping them
+        displayName: "Build, Pack and Push to Feed"
+        steps:
+          - task: NuGetAuthenticate@1
+            displayName: "Authenticate Azure Pipeline to Azure Artifacts"
+          - script: './build.cmd'
+            displayName: 'Run Nuke'
+            env:
+              NugetArtifactsApiKey: "Dummy" # Ignored but required https://github.com/NuGet/Home/issues/7792#issuecomment-631683878
+              BranchSpec: $(Build.SourceBranch)
+              BuildNumber: $(Build.BuildNumber)
+{{~ end ~}}
