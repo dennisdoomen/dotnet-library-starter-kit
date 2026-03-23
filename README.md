@@ -22,12 +22,12 @@ A battle-tested starter kit for building open-source and internal NuGet librarie
 
 <a href="#about">About</a> •
 <a href="#download">Download</a> •
-<a href="#how-to-use-it">How To Use</a> •
+<a href="#how-do-i-use-it">How To Use</a> •
 <a href="#building">Building</a> •
 <a href="#contributors">Contributors</a> •
 <a href="#versioning">Versioning</a> •
 <a href="#credits">Credits</a> •
-<a href="#related">Related</a> •
+<a href="#you-may-also-like">Related</a> •
 <a href="#license">License</a>
 
 </div>
@@ -137,6 +137,10 @@ By default, a `dotnet restore` will also check the NuGet packages [for any vulne
 1. Update the dependencies to a version that resolve the vulnerability
 1. Update the `WarningsNotAsErrors` element in the `Directory.Build.Props` file to include the relevant `NU190x` error codes as listed [here](https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages#warning-codes).
 1. Disable auditing entirely by setting the `NuGetAudit` element to `false` in that same `Directory.Build.Props` file.
+
+### About Azure Pipelines and GitVersion
+
+If you are using Azure Pipelines, make sure to disable the [Shallow Fetch](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-checkout?view=azure-pipelines) option in your pipeline's checkout step (or set `fetchDepth: 0`). GitVersion requires the full Git history to calculate the version number correctly.
 
 ### About API verification
 

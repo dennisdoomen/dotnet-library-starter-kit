@@ -153,8 +153,8 @@ dotnet_diagnostic.ca1812.severity = none
 dotnet_diagnostic.ca1819.severity = suggestion
 
 # Purpose: For improved performance, use the LoggerMessage delegates instead of calling 'LoggerExtensions.LogInformation(ILogger, string?, params object?[])'
-# Reason: For now, we prefer to use explicit checks using IsEnabled
-dotnet_diagnostic.ca1848.severity = none
+# Reason: We prefer to use explicit checks using IsEnabled, but keep this as a suggestion to be aware of the performance recommendation
+dotnet_diagnostic.ca1848.severity = suggestion
 
 # Purpose: Use Task.ConfigureAwait(false) if the current SynchronizationContext is not needed
 # Reason: Not relevant for .NET Core web applications.
