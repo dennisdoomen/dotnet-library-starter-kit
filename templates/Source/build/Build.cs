@@ -78,7 +78,10 @@ class Build : NukeBuild
     Tool PackageGuard;
 
     [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
-    Tool InspectCode;
+    Tool InspectCodeExe;
+
+    [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.sh")]
+    Tool InspectCodeSh;
 
     string SemVer;
 
@@ -131,10 +134,10 @@ class Build : NukeBuild
 
     Target RunInspectCode => _ => _
         .DependsOn(Compile)
-        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
-            InspectCode($"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
+            Tool inspectCode = EnvironmentInfo.IsWin ? InspectCodeExe : InspectCodeSh;
+            inspectCode($"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
         });
 
     Target RunTests => _ => _
