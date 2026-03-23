@@ -7,7 +7,6 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
 using Scriban;
@@ -301,7 +300,9 @@ class Build : NukeBuild
                 string additionalOption = name == "Normal" ? "" : " -skip ScanPackages";
 
                 Environment.SetEnvironmentVariable("GitHubApiKey", GitHubApiKey);
-                PowerShellTasks.PowerShell($"./build.ps1 Pack {additionalOption}", workingDirectory: templateDirectory);
+                var process = ProcessTasks.StartProcess("bash", $"./build.sh Pack{additionalOption}", workingDirectory: templateDirectory);
+                process.WaitForExit();
+                process.AssertZeroExitCode();
 
                 Assert.NotEmpty((templateDirectory / "Artifacts").GlobFiles("*.nupkg"));
             }
