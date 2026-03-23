@@ -133,7 +133,7 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            InspectCode($"MyPackage.sln -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
+            InspectCode($"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
         });
 
     Target RunTests => _ => _
