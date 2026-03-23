@@ -149,6 +149,11 @@ Or, if you have, the [Nuke tool installed](https://nuke.build/docs/getting-start
 
 Also try using `--help` to see all the available options or `--plan` to see what the scripts does.
 
+{{~ if azdo ~}}
+> [!NOTE]
+> Azure Pipelines uses Shallow Fetch by default, which will cause GitVersion to fail. Disable it in your pipeline settings under *General* → uncheck *Shallow fetch*.
+{{~ end ~}}
+
 {{~ if !package_readme ~}}
 ## Contributing
 
