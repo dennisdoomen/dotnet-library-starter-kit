@@ -131,6 +131,7 @@ class Build : NukeBuild
 
     Target RunInspectCode => _ => _
         .DependsOn(Compile)
+        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
         .Executes(() =>
         {
             InspectCode($"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
