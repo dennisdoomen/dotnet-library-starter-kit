@@ -142,6 +142,10 @@ By default, a `dotnet restore` will also check the NuGet packages [for any vulne
 
 The `ApiVerificationTests` will generate a `.txt` file containing a representation (per target framework) of the public API of your library. It's a nice technique to prevent accidentally introducing breaking changes. So, whenever the structure of your API changes compared to the snapshot stored in the `ApprovedApi` folder, the test will fail. You can then use `AcceptApiChanges.ps1` to update the snapshots and make the test succeed again. Alternatively, you can install the plug-in [Verify Support](https://plugins.jetbrains.com/plugin/17240-verify-support) by Matthias Koch to do this from inside [JetBrains Rider](https://www.jetbrains.com/rider/) or [ReSharper](https://www.jetbrains.com/resharper/). 
 
+### About Azure Pipelines and GitVersion
+
+If you are using the Azure DevOps template, make sure to disable the **Shallow Fetch** option in your Azure Pipelines pipeline settings. GitVersion requires access to the full Git history to calculate the version number correctly, and shallow clones will cause it to fail. 
+
 ## Building
 
 To build this repository locally, you need the following:

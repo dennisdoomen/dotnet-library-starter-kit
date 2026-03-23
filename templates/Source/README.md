@@ -30,13 +30,12 @@
 ![](https://img.shields.io/badge/release%20strategy-githubflow-orange.svg)
 
 <a href="#about">About</a> •
-<a href="#how-to-use-it">How To Use</a> •
+<a href="#how-do-i-use-it">How To Use</a> •
 <a href="#download">Download</a> •
 <a href="#building">Building</a> •
 <a href="#contributing">Contributing</a> •
 <a href="#versioning">Versioning</a> •
 <a href="#credits">Credits</a> •
-<a href="#related">Related</a> •
 {{~ if open_source ~}}
 <a href="#license">License</a>
 {{~ end ~}}
@@ -50,11 +49,14 @@
 
 The template makes a lot of assumptions, so after generating the project, there's a couple of things you can tweak.
 
-* Update the `Readme.md` and `PackageReadme.md` with information about your library
+* Update the `README.md` with information about your library (the `PackageReadme.md` is automatically generated from it during the build)
 * Review the guidelines in `CONTRIBUTING.md` to see if it aligns with how you want to handle contributions
 {{~ if !azdo ~}}
 * Review the issue templates under `.github/issue_template`
 * Set-up labels in GitHub matching those in the `release.yml` so you can label pull requests accordingly
+{{~ end ~}}
+{{~ if azdo ~}}
+* Disable the **Shallow Fetch** option in your Azure DevOps pipeline settings to allow GitVersion to calculate the version number correctly
 {{~ end ~}}
 * Adjust the .NET frameworks this library should target
 * Adjust the root namespace and assembly names
