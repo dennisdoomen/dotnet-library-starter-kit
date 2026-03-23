@@ -30,13 +30,13 @@
 ![](https://img.shields.io/badge/release%20strategy-githubflow-orange.svg)
 
 <a href="#about">About</a> •
-<a href="#how-to-use-it">How To Use</a> •
+<a href="#how-do-i-use-it">How To Use</a> •
 <a href="#download">Download</a> •
 <a href="#building">Building</a> •
 <a href="#contributing">Contributing</a> •
 <a href="#versioning">Versioning</a> •
 <a href="#credits">Credits</a> •
-<a href="#related">Related</a> •
+<a href="#you-may-also-like">Related</a> •
 {{~ if open_source ~}}
 <a href="#license">License</a>
 {{~ end ~}}
