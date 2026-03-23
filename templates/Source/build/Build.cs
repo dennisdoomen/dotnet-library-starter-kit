@@ -77,12 +77,6 @@ class Build : NukeBuild
     [NuGetPackage("PackageGuard", "PackageGuard.dll")]
     Tool PackageGuard;
 
-    [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
-    Tool InspectCodeExe;
-
-    [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.sh")]
-    Tool InspectCodeSh;
-
     string SemVer;
 
     Target CalculateNugetVersion => _ => _
@@ -136,7 +130,8 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            Tool inspectCode = EnvironmentInfo.IsWin ? InspectCodeExe : InspectCodeSh;
+            var executableHint = EnvironmentInfo.IsWin ? "inspectcode.exe" : "inspectcode.sh";
+            var inspectCode = ToolResolver.GetNuGetTool("JetBrains.ReSharper.GlobalTools", executableHint);
             inspectCode($"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build");
         });
 
