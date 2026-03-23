@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Files/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="build/_build.csproj">
+    <Build Project="false" />
+  </Project>
+  <Project Path="MyPackage.ApiVerificationTests/MyPackage.ApiVerificationTests.csproj" />
+  <Project Path="MyPackage.Specs/MyPackage.Specs.csproj" />
+  <Project Path="MyPackage/MyPackage.csproj" />
+</Solution>
