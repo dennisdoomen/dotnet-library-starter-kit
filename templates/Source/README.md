@@ -50,7 +50,7 @@
 
 The template makes a lot of assumptions, so after generating the project, there's a couple of things you can tweak.
 
-* Update the `Readme.md` and `PackageReadme.md` with information about your library
+* Update the `Readme.md` with information about your library. Note that `PackageReadme.md` is automatically generated from it during the build
 * Review the guidelines in `CONTRIBUTING.md` to see if it aligns with how you want to handle contributions
 {{~ if !azdo ~}}
 * Review the issue templates under `.github/issue_template`
