@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: "Build, Package and Publish"
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       DOTNET_NOLOGO: false
@@ -29,7 +29,7 @@ jobs:
           8.0.x
 
     - name: Run NUKE
-      run: ./build.ps1
+      run: ./build.sh
       env:
         NuGetApiKey: ${{ secrets.NUGETAPIKEY }}
         GitHubApiKey: ${{ secrets.GITHUB_TOKEN }}
@@ -38,6 +38,6 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: windows-artifacts
+        name: ubuntu-artifacts
         path: |
           ./Artifacts/*

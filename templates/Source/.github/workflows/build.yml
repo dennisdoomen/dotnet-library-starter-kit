@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: "Build, Test, Analyze and Publish"
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       DOTNET_NOLOGO: false
@@ -39,7 +39,7 @@ jobs:
           6.0.x
 
     - name: Run NUKE
-      run: ./build.ps1
+      run: ./build.sh
       env:
         NuGetApiKey: ${{ secrets.NUGETAPIKEY }}
         GitHubApiKey: ${{ secrets.GITHUB_TOKEN }}
@@ -79,7 +79,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v5
       with:
-        name: windows-artifacts
+        name: ubuntu-artifacts
         path: |
           ./Artifacts/*
           ./TestResults/*.trx
