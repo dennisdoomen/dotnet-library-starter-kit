@@ -257,7 +257,7 @@ class Build : NukeBuild
                     Information("Successfully built project from template: {Template}", templateName);
 
                     // Check if the basic project structure was created correctly
-                    if ((actualProjectDirectory / $"TestLibrary.sln").FileExists() ||
+                    if ((actualProjectDirectory / $"TestLibrary.slnx").FileExists() ||
                         (actualProjectDirectory / $"TestLibrary").DirectoryExists())
                     {
                         Information("Project structure was created successfully for template: {Template}", templateName);

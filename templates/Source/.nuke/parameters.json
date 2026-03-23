@@ -1,4 +1,4 @@
 {
   "$schema": "./build.schema.json",
-  "Solution": "MyPackage.sln"
+  "Solution": "MyPackage.slnx"
 }
