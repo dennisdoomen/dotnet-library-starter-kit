@@ -37,7 +37,7 @@ class Build : NukeBuild
     [Solution(GenerateProjects = true)]
     readonly Solution Solution;
 
-    [GitVersion(Framework = "net6.0", NoFetch = true)]
+    [GitVersion(Framework = "net10.0", NoFetch = true)]
     readonly GitVersion GitVersion;
 
     GitHubActions GitHubActions => GitHubActions.Instance;
@@ -208,7 +208,9 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var packageFile = ArtifactsDirectory.GlobFiles("*.nupkg").OrderByDescending(x => x.ToString()).First();
-            var testDirectory = RootDirectory / "temp" / "test-installation";
+            var testDirectory = TemporaryDirectory / "test-installation";
+
+            testDirectory.DeleteDirectory();
 
             try
             {
@@ -282,8 +284,6 @@ class Build : NukeBuild
                 {
                     Warning("Failed to uninstall package DotNetLibraryPackageTemplates: {Error}", e.Message);
                 }
-
-                testDirectory.DeleteDirectory();
             }
         });
 

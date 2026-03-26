@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ContentTargetFolders>content</ContentTargetFolders>
@@ -41,10 +41,10 @@
     <Title>.NET Library Package Templates</Title>
     <Company>Dennis Doomen</Company>
     <Authors>Dennis Doomen</Authors>
-    <Copyright>Dennis Doomen 2025</Copyright>
+    <Copyright>Dennis Doomen 2025-2026</Copyright>
     <Description>A bunch of "dotnet new" solution templates for building high-quality binary and source-only packages inspired by Fluent Assertions.</Description>
     <PackageTags>c#;.net;template;nuget</PackageTags>
-    <PackageCopyright>Dennis Doomen 2025</PackageCopyright>
+    <PackageCopyright>Dennis Doomen 2025-2026</PackageCopyright>
     <PackageProjectUrl>https://github.com/dennisdoomen/dotnet-library-starter-kit</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
