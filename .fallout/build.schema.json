@@ -27,6 +27,7 @@
         "CalculateNugetVersion",
         "Compile",
         "Default",
+        "DownloadCSharpGuidelinesSkills",
         "Pack",
         "PreparePackageReadme",
         "PrepareTemplateReadmes",
@@ -46,7 +47,7 @@
         "Quiet"
       ]
     },
-    "NukeBuild": {
+    "FalloutBuild": {
       "properties": {
         "Continue": {
           "type": "boolean",
@@ -115,6 +116,10 @@
             "Release"
           ]
         },
+        "CSharpGuidelinesVersion": {
+          "type": "string",
+          "description": "The tag of dennisdoomen/CSharpGuidelines to download skills from"
+        },
         "GitHubApiKey": {
           "type": "string",
           "description": "The key to use for scanning packages on GitHub",
@@ -132,7 +137,7 @@
       }
     },
     {
-      "$ref": "#/definitions/NukeBuild"
+      "$ref": "#/definitions/FalloutBuild"
     }
   ]
 }
