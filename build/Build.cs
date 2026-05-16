@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
@@ -33,6 +36,9 @@ class Build : NukeBuild
     [Parameter("The key to use for scanning packages on GitHub")]
     [Secret]
     readonly string GitHubApiKey;
+
+    [Parameter("The tag of dennisdoomen/CSharpGuidelines to download skills from")]
+    readonly string CSharpGuidelinesVersion = "6.0.0";
 
     [Solution(GenerateProjects = true)]
     readonly Solution Solution;
@@ -139,9 +145,69 @@ class Build : NukeBuild
             }
         });
 
+    Target DownloadCSharpGuidelinesSkills => _ => _
+        .DependsOn(PrepareTemplates)
+        .Executes(async () =>
+        {
+            Information("Downloading CSharpGuidelines skills for version {Version}", CSharpGuidelinesVersion);
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Nuke-Build/1.0");
+
+            if (!string.IsNullOrEmpty(GitHubApiKey))
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", GitHubApiKey);
+            }
+
+            string rawBase = $"https://raw.githubusercontent.com/dennisdoomen/CSharpGuidelines/{CSharpGuidelinesVersion}";
+
+            // Download SKILL.md once
+            string skillContent = await client.GetStringAsync($"{rawBase}/Skills/csharp-guidelines/SKILL.md");
+
+            // List reference files once via GitHub API
+            string refsApiUrl = $"https://api.github.com/repos/dennisdoomen/CSharpGuidelines/contents/Skills/csharp-guidelines/references?ref={CSharpGuidelinesVersion}";
+            string refsJson = await client.GetStringAsync(refsApiUrl);
+
+            using var refsDoc = JsonDocument.Parse(refsJson);
+            var referenceFiles = refsDoc.RootElement.EnumerateArray()
+                .Select(e => (
+                    Name: e.GetProperty("name").GetString()!,
+                    DownloadUrl: e.GetProperty("download_url").GetString()!))
+                .ToArray();
+
+            var referenceContents = new System.Collections.Generic.Dictionary<string, string>();
+            foreach (var (name, downloadUrl) in referenceFiles)
+            {
+                referenceContents[name] = await client.GetStringAsync(downloadUrl);
+                Information("Downloaded reference file {File}", name);
+            }
+
+            // Write into every template variant
+            string[] variantNames = ["Normal", "NormalOss", "SourceOnly", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
+            foreach (string variant in variantNames)
+            {
+                var skillsDir = ArtifactsDirectory / "templates" / variant / ".agents" / "skills" / "csharp-guidelines";
+                skillsDir.CreateOrCleanDirectory();
+
+                (skillsDir / "SKILL.md").WriteAllText(skillContent);
+
+                var refsDir = skillsDir / "references";
+                refsDir.CreateDirectory();
+
+                foreach (var (name, content) in referenceContents)
+                {
+                    (refsDir / name).WriteAllText(content);
+                }
+
+                Information("Wrote CSharpGuidelines skills to {Variant}", variant);
+            }
+        });
+
     Target Compile => _ => _
         .DependsOn(CalculateNugetVersion)
         .DependsOn(PrepareTemplateReadmes)
+        .DependsOn(DownloadCSharpGuidelinesSkills)
         .Executes(() =>
         {
             ReportSummary(s => s
