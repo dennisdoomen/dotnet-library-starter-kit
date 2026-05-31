@@ -192,3 +192,6 @@ Tests/Benchmarks/BenchmarkDotNet.Artifacts/
 
 # Documentation spell check
 node_modules/
+
+# Nuke/Fallout temporary files
+.fallout/temp

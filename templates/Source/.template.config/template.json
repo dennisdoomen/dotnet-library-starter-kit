@@ -16,8 +16,7 @@
           }
         ],
         "source": "./",
-        "target": "./",
-        "copyOnly": [ "**/*.cs" ]
+        "target": "./"
       }
     ],
 {{~ if azdo ~}}
@@ -72,4 +71,3 @@
     "shortName": "oss-source-only-nuget-class-library-sln"
 {{ end ~}}
 }
-

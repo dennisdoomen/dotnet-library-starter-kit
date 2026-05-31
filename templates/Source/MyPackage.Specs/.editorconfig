@@ -32,6 +32,10 @@ dotnet_diagnostic.CA1822.severity = none
 # Reason: We don't care about this in tests
 dotnet_diagnostic.CA1852.severity = none
 
+# Purpose: File name must match type name
+# Reason: We often have all kinds of supporting types in a test suite
+dotnet_diagnostic.MA0048.severity = suggestion
+
 # Purpose: XML comment analysis is disabled due to project configuration
 # Reason: We don't need the documentation from the tests
 dotnet_diagnostic.SA0001.severity = none

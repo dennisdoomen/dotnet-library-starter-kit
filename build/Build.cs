@@ -3,21 +3,21 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.PowerShell;
-using Nuke.Common.Utilities;
-using Nuke.Common.Utilities.Collections;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.GitVersion;
+using Fallout.Common.Tools.PowerShell;
+using Fallout.Common.Utilities;
+using Fallout.Common.Utilities.Collections;
 using Scriban;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
 
-class Build : NukeBuild
+class Build : FalloutBuild
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -43,7 +43,7 @@ class Build : NukeBuild
     [Solution(GenerateProjects = true)]
     readonly Solution Solution;
 
-    [GitVersion(Framework = "net6.0", NoFetch = true)]
+    [GitVersion(Framework = "net10.0", NoFetch = true)]
     readonly GitVersion GitVersion;
 
     GitHubActions GitHubActions => GitHubActions.Instance;
@@ -160,10 +160,10 @@ class Build : NukeBuild
                     new AuthenticationHeaderValue("Bearer", GitHubApiKey);
             }
 
-            string rawBase = $"https://raw.githubusercontent.com/dennisdoomen/CSharpGuidelines/{CSharpGuidelinesVersion}";
+            string rawBase = $"https://raw.githubusercontent.com/dennisdoomen/CSharpGuidelines/{CSharpGuidelinesVersion}/Skills/csharp-guidelines/SKILL.md";
 
             // Download SKILL.md once
-            string skillContent = await client.GetStringAsync($"{rawBase}/Skills/csharp-guidelines/SKILL.md");
+            string skillContent = await client.GetStringAsync(rawBase);
 
             // List reference files once via GitHub API
             string refsApiUrl = $"https://api.github.com/repos/dennisdoomen/CSharpGuidelines/contents/Skills/csharp-guidelines/references?ref={CSharpGuidelinesVersion}";
@@ -274,7 +274,9 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var packageFile = ArtifactsDirectory.GlobFiles("*.nupkg").OrderByDescending(x => x.ToString()).First();
-            var testDirectory = RootDirectory / "temp" / "test-installation";
+            var testDirectory = ArtifactsDirectory / "install";
+
+            testDirectory.DeleteDirectory();
 
             try
             {
@@ -307,7 +309,8 @@ class Build : NukeBuild
 
                 foreach (string templateName in templateShortNames)
                 {
-                    var projectTestDirectory = testDirectory / $"test-{templateName}";
+                    var projectTestDirectory = testDirectory / $"solution";
+                    projectTestDirectory.DeleteDirectory();
                     projectTestDirectory.CreateDirectory();
 
                     Information("Testing template: {Template}", templateName);
@@ -348,8 +351,6 @@ class Build : NukeBuild
                 {
                     Warning("Failed to uninstall package DotNetLibraryPackageTemplates: {Error}", e.Message);
                 }
-
-                testDirectory.DeleteDirectory();
             }
         });
 
