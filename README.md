@@ -46,7 +46,7 @@ It includes:
 * Code coverage using [Coverlet](https://github.com/coverlet-coverage/coverlet) and [Coveralls.io](https://coveralls.io/)
 * Static code analysis using Roslyn analyzers [StyleCopAnalyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers), [Roslynator](https://github.com/dotnet/roslynator), [CSharpGuidelinesAnalyzer](https://github.com/bkoelman/CSharpGuidelinesAnalyzer) and [Meziantou](https://github.com/meziantou/Meziantou.Framework).
 * Auto-formatting using (a slightly opinionated) `.editorconfig` and settings honored by [JetBrains Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/)
-* A [Nuke](https://nuke.build/) C# build script that you can run locally as well as in your CI/CD pipeline
+* A [Fallout](https://fallout.build/) C# build script that you can run locally as well as in your CI/CD pipeline
 * A GitHub Actions workflow that builds, tests, packages and publishes your library
 * GitHub issue templates to streamline bug reporting and feature requests
 * An extensive read-me
@@ -152,9 +152,9 @@ You can also build, run the unit tests and package the code using the following 
 
 `build.ps1`
 
-Or, if you have, the [Nuke tool installed](https://nuke.build/docs/getting-started/installation/):
+Or, if you have, the [Fallout tool installed](https://fallout.build/):
 
-`nuke`
+`fallout`
 
 Also try using `--help` to see all the available options or `--plan` to see what the scripts does.
 
@@ -176,7 +176,7 @@ This library wouldn't have been possible without the following tools, packages a
 
 * [ASP.NET Core Template](https://github.com/NikolayIT/ASP.NET-Core-Template) - Created by [Nikolay Kostov](https://github.com/NikolayIT) and the inspiration for this repo.
 * [Scriban](https://github.com/scriban/scriban/) - A fast, powerful, safe and lightweight scripting language and engine by [Alexandre Mutel](https://github.com/xoofx)
-* [Nuke](https://nuke.build/) - Smart automation for DevOps teams and CI/CD pipelines by [Matthias Koch](https://github.com/matkoch)
+* [Fallout](https://fallout.build/) - Smart automation for DevOps teams and CI/CD pipelines by [Matthias Koch](https://github.com/matkoch)
 * [Rider](https://www.jetbrains.com/rider/) - The world's most loved .NET and game dev IDE by [JetBrains](https://www.jetbrains.com/)
 * [xUnit](https://xunit.net/) - Community-focused unit testing tool for .NET by [Brad Wilson](https://github.com/bradwilson)
 * [Coverlet](https://github.com/coverlet-coverage/coverlet) - Cross platform code coverage for .NET by [Toni Solarin-Sodara](https://github.com/tonerdo)
