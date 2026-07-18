@@ -16,6 +16,7 @@
 {{~ if !azdo ~}}
 [![](https://img.shields.io/github/actions/workflow/status/your-github-username/mypackage/build.yml?branch=main)](https://github.com/your-github-username/mypackage/actions?query=branch%3amain)
 [![Coveralls branch](https://img.shields.io/coverallsCoverage/github/your-github-username/mypackage?branch=main)](https://coveralls.io/github/your-github-username/mypackage?branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=your-github-username_mypackage&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=your-github-username_mypackage)
 [![](https://img.shields.io/github/release/your-github-username/mypackage.svg?label=latest%20release&color=007edf)](https://github.com/your-github-username/mypackage/releases/latest)
 [![](https://img.shields.io/nuget/dt/mypackage.svg?label=downloads&color=007edf&logo=nuget)](https://www.nuget.org/packages/mypackage)
 [![](https://img.shields.io/librariesio/dependents/nuget/mypackage.svg?label=dependent%20libraries)](https://libraries.io/nuget/mypackage)
@@ -62,6 +63,9 @@ The template makes a lot of assumptions, so after generating the project, there'
 * For the source-only packages, update the `.nuspec` file so it represents your information.
 {{~ end ~}}
 * Alter the coverage service that is being used.
+{{~ if !azdo ~}}
+* Optionally enable [SonarCloud](https://sonarcloud.io) analysis: create a project on sonarcloud.io for this repository, then add a `SONAR_TOKEN` secret to the GitHub repository. The build silently skips SonarCloud analysis when this secret isn't set.
+{{~ end ~}}
 * Determine if you want to use API verification against snapshots
 * Study the Nuke `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
 * See if all dependencies are up-to-date
