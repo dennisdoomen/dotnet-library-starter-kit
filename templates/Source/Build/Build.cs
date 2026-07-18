@@ -13,10 +13,16 @@ using Fallout.Common.Tools.Coverlet;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.GitVersion;
 using Fallout.Common.Tools.ReportGenerator;
+{{~ if !azdo ~}}
+using Fallout.Common.Tools.SonarScanner;
+{{~ end ~}}
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 using static Fallout.Common.Tools.ReportGenerator.ReportGeneratorTasks;
+{{~ if !azdo ~}}
+using static Fallout.Common.Tools.SonarScanner.SonarScannerTasks;
+{{~ end ~}}
 using static Serilog.Log;
 
 class Build : FalloutBuild
@@ -61,6 +67,23 @@ class Build : FalloutBuild
     [Parameter("The key to use for scanning packages on GitHub")]
     [Secret]
     readonly string GitHubApiKey;
+
+{{~ if !azdo ~}}
+    [Parameter("The token used to authenticate with SonarCloud. Leave empty to skip SonarCloud analysis entirely.")]
+    [Secret]
+    readonly string SonarToken;
+
+    // Defaults to the GitHub repository owner and "owner_repo", so no extra
+    // dotnet-new parameters are required to opt in to SonarCloud analysis.
+    string SonarOrganization => GitHubActions?.RepositoryOwner;
+
+    string SonarProjectKey => GitHubActions?.Repository.Replace('/', '_');
+
+    [Parameter("The URL of the SonarQube/SonarCloud server to analyze against.")]
+    readonly string SonarHostUrl = "https://sonarcloud.io";
+
+    bool UseSonarCloud => !string.IsNullOrWhiteSpace(SonarToken);
+{{~ end ~}}
 
     [Solution(GenerateProjects = true)]
     readonly Solution Solution;
@@ -109,9 +132,30 @@ class Build : FalloutBuild
                 .EnableNoCache());
         });
 
+{{~ if !azdo ~}}
+    Target SonarBegin => _ => _
+        .DependsOn(Restore)
+        .OnlyWhenDynamic(() => UseSonarCloud)
+        .Executes(() =>
+        {
+            Information("Starting SonarCloud analysis for project {ProjectKey}", SonarProjectKey);
+
+            SonarScannerBegin(s => s
+                .SetProjectKey(SonarProjectKey)
+                .SetOrganization(SonarOrganization)
+                .SetServer(SonarHostUrl)
+                .SetToken(SonarToken)
+                .SetVersion(GitVersion.SemVer)
+                .SetGenericCoveragePaths(TestResultsDirectory / "reports" / "SonarQube.xml"));
+        });
+{{~ end ~}}
+
     Target Compile => _ => _
         .DependsOn(CalculateNugetVersion)
         .DependsOn(Restore)
+{{~ if !azdo ~}}
+        .DependsOn(SonarBegin)
+{{~ end ~}}
         .Executes(() =>
         {
             ReportSummary(s => s
@@ -201,7 +245,7 @@ class Build : FalloutBuild
 {{~ else ~}}
             ReportGenerator(s => s
 				.AddReports(TestResultsDirectory / "**/coverage.cobertura.xml")
-                .AddReportTypes(ReportTypes.lcov, ReportTypes.Html)
+                .AddReportTypes(ReportTypes.lcov, ReportTypes.Html, ReportTypes.SonarQube)
                 .SetTargetDirectory(TestResultsDirectory / "reports")
                 .AddFileFilters("-*.g.cs"));
 
@@ -258,6 +302,17 @@ class Build : FalloutBuild
             (ArtifactsDirectory / "Readme.md").WriteAllText(readmeContent);
         });
 
+{{~ if !azdo ~}}
+    Target SonarEnd => _ => _
+        .DependsOn(RunTests, GenerateCodeCoverageReport, ApiChecks)
+        .OnlyWhenDynamic(() => UseSonarCloud)
+        .Executes(() =>
+        {
+            SonarScannerEnd(s => s
+                .SetToken(SonarToken));
+        });
+{{~ end ~}}
+
     Target Pack => _ => _
         .DependsOn(ScanPackages)
         .DependsOn(PreparePackageReadme)
@@ -265,6 +320,9 @@ class Build : FalloutBuild
         .DependsOn(ApiChecks)
         .DependsOn(GenerateCodeCoverageReport)
         {{~ if azdo }}.DependsOn(PublishTestResults){{~ end ~}}
+{{~ if !azdo ~}}
+        .DependsOn(SonarEnd)
+{{~ end ~}}
         .Executes(() =>
         {
             ReportSummary(s => s

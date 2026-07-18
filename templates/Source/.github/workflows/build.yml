@@ -38,11 +38,19 @@ jobs:
           3.0.x
           6.0.x
 
+    - name: Setup Java (required by SonarCloud's scanner)
+      uses: actions/setup-java@v5
+      if: ${{ secrets.SONAR_TOKEN != '' }}
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
     - name: Run NUKE
       run: ./build.ps1
       env:
         NuGetApiKey: ${{ secrets.NUGETAPIKEY }}
         GitHubApiKey: ${{ secrets.GITHUB_TOKEN }}
+        SonarToken: ${{ secrets.SONAR_TOKEN }}
 
     - name: Check for 'lcov.info' existence
       id: check_files
