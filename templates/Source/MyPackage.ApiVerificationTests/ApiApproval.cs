@@ -33,7 +33,9 @@ public class ApiApproval
         var publicApi = assembly.GeneratePublicApi(options: null);
 
         return Verifier
-            .Verify(publicApi)
+            // The trailing newline keeps this in sync with the *.verified.txt files, which always end
+            // with a newline because the build's template rendering step normalizes text files that way.
+            .Verify(publicApi + "\n")
             .ScrubLinesContaining("FrameworkDisplayName")
             .UseDirectory("ApprovedApi")
             .UseFileName(framework)
