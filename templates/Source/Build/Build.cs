@@ -7,7 +7,6 @@ using Fallout.Common.CI.AzurePipelines;
 using Fallout.Common.CI.GitHubActions;
 {{~ end ~}}
 using Fallout.Common.IO;
-using Fallout.Common.ProjectModel;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.Coverlet;
 using Fallout.Common.Tools.DotNet;
@@ -15,6 +14,7 @@ using Fallout.Common.Tools.GitVersion;
 using Fallout.Common.Tools.ReportGenerator;
 using Fallout.Common.Utilities;
 using Fallout.Common.Utilities.Collections;
+using Fallout.Solutions;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 using static Fallout.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 using static Serilog.Log;
