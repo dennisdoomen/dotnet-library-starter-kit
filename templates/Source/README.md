@@ -58,9 +58,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 {{~ end ~}}
 * Adjust the .NET frameworks this library should target
 * Adjust the root namespace and assembly names
-{{~ if source_only ~}}
-* For the source-only packages, update the `.nuspec` file so it represents your information.
-{{~ end ~}}
+* Update the package metadata (authors, description, tags, project URL, copyright) in the `MyPackage.csproj` file
 * Alter the coverage service that is being used.
 * Determine if you want to use API verification against snapshots
 * Study the Nuke `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
@@ -72,9 +70,6 @@ The template makes a lot of assumptions, so after generating the project, there'
 * Adjust the `funding.yml` to allow people to sponsor your project
 * Review the code of conduct to see if it matches your opinions
 {{~ end ~}}
-
-> [!NOTE]
-> Before the first time the build script has run on your new solution, the `.nuspec` file is still called `nuspec`. This was needed because `dotnet pack` refuses to include the `.nuspec` file in the template package this repository produces. This file is automatically renamed after the first time the `build.ps1` script is run. 
 
 > [!TIP]
 > Also check-out the [main repository](https://github.com/dennisdoomen/dotnet-library-starter-kit) for additional information on these generated solutions.

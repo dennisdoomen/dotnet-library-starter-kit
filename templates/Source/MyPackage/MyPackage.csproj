@@ -7,8 +7,7 @@
     <LangVersion>default</LangVersion>
 {{ if source_only ~}}
     <ImplicitUsings>disable</ImplicitUsings>
-    <NuSpecFile>.nuspec</NuSpecFile>
-    <NuspecProperties>version=$(Version)</NuspecProperties>
+    <DevelopmentDependency>true</DevelopmentDependency>
     <DefineConstants>MYPACKAGE_COMPILE</DefineConstants>
 {{ else ~}}
     <ImplicitUsings>enable</ImplicitUsings>
@@ -20,7 +19,6 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
-{{~ if !source_only ~}}
   <PropertyGroup Label="Package info">
     <Authors>Your name</Authors>
     <PackageDescription>
@@ -44,7 +42,6 @@
     {{~ end ~}}
     <Copyright>Copyright 2026-$([System.DateTime]::Now.ToString(yyyy)) Your Name</Copyright>
   </PropertyGroup>
-{{ end ~}}
 
   <ItemGroup Label="Package files">
     <None Include="..\PackageIcon.png" Pack="true" Visible="false" PackagePath="" />
@@ -53,6 +50,13 @@
     {{~ end ~}}
     <None Include="..\PackageReadme.md" Pack="true" PackagePath="Readme.md"/>
   </ItemGroup>
+
+{{~ if source_only ~}}
+  <ItemGroup Label="Source-only package content">
+    <None Include="*.cs" Pack="true" Visible="false" PackagePath="contentFiles/cs/any/MyPackage/" />
+    <None Include="MyPackage.props" Pack="true" Visible="false" PackagePath="build/" />
+  </ItemGroup>
+{{~ end ~}}
 
   <ItemGroup Label="Internals visible to">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
