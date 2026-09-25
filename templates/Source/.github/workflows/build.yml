@@ -31,11 +31,6 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v5
-      with:
-        global-json-file: global.json
-
     - name: Run NUKE
       run: ./build.ps1
       env:
