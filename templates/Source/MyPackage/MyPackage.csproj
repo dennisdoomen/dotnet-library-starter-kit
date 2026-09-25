@@ -13,7 +13,6 @@
 {{ else ~}}
     <ImplicitUsings>enable</ImplicitUsings>
 {{ end ~}}
-    <NoWarn>1591;1573</NoWarn>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>

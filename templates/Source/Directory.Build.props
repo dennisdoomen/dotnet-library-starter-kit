@@ -6,8 +6,6 @@
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAudit>true</NuGetAudit>
     <NoWarn>1591;1573</NoWarn>
-    <WarningsNotAsErrors>$(WarningsNotAsErrors)</WarningsNotAsErrors> <!-- disable EOL warnings -->
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <!-- To reduce build times, we only enable analyzers for the newest TFM -->

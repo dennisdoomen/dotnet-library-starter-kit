@@ -65,7 +65,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 {{~ end ~}}
 * Alter the coverage service that is being used.
 * Determine if you want to use API verification against snapshots
-* Study the Nuke `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
+* Study the Fallout `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
 * See if all dependencies are up-to-date
 * Configure NuGet auditing (see next paragraph)
 * Fine-tune the allowed open-source licenses and packages in the `.\packageguard\config.json`
@@ -145,9 +145,9 @@ You can also build, run the unit tests and package the code using the following 
 
 `build.ps1`
 
-Or, if you have, the [Nuke tool installed](https://nuke.build/docs/getting-started/installation/):
+Or, if you have, the [Fallout tool installed](https://fallout.build/):
 
-`nuke`
+`fallout`
 
 Also try using `--help` to see all the available options or `--plan` to see what the scripts does.
 
@@ -173,7 +173,7 @@ This library uses [Semantic Versioning](https://semver.org/) to give meaning to 
 ## Credits
 This library wouldn't have been possible without the following tools, packages and companies:
 
-* [Nuke](https://nuke.build/) - Smart automation for DevOps teams and CI/CD pipelines by [Matthias Koch](https://github.com/matkoch)
+* [Fallout](https://fallout.build/) - Smart automation for DevOps teams and CI/CD pipelines by [Matthias Koch](https://github.com/matkoch)
 * [xUnit](https://xunit.net/) - Community-focused unit testing tool for .NET by [Brad Wilson](https://github.com/bradwilson)
 * [Coverlet](https://github.com/coverlet-coverage/coverlet) - Cross platform code coverage for .NET by [Toni Solarin-Sodara](https://github.com/tonerdo)
 * [Polysharp](https://github.com/Sergio0694/PolySharp) - Generated, source-only polyfills for C# language features by [Sergio Pedri](https://github.com/Sergio0694)
