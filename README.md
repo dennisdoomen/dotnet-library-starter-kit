@@ -48,6 +48,7 @@ It includes:
 * Auto-formatting using (a slightly opinionated) `.editorconfig` and settings honored by [JetBrains Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/)
 * A [Fallout](https://fallout.build/) C# build script that you can run locally as well as in your CI/CD pipeline
 * A GitHub Actions workflow that builds, tests, packages and publishes your library
+* A CodeQL workflow (GitHub templates only) that scans for security vulnerabilities on pull requests, pushes to `main` and a weekly schedule
 * GitHub issue templates to streamline bug reporting and feature requests
 * An extensive read-me
 * Automatic versioning using [GitVersion](https://gitversion.net/) and tagging

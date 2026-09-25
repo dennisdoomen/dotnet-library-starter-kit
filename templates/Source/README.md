@@ -55,6 +55,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 {{~ if !azdo ~}}
 * Review the issue templates under `.github/issue_template`
 * Set-up labels in GitHub matching those in the `release.yml` so you can label pull requests accordingly
+* This repository includes a CodeQL workflow (`.github/workflows/codeql.yml`) that scans for security vulnerabilities. On private repositories, this requires [GitHub Advanced Security](https://docs.github.com/en/get-started/learning-about-github/about-github-advanced-security) to be enabled. If that's not available to you, either make the repository public or remove the workflow file
 {{~ end ~}}
 * Adjust the .NET frameworks this library should target
 * Adjust the root namespace and assembly names
