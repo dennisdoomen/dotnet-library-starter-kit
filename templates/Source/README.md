@@ -59,6 +59,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 {{~ end ~}}
 * Adjust the .NET frameworks this library should target
 * Adjust the root namespace and assembly names
+* Replace the `YEAR` placeholder in the `Copyright` element of the `.csproj`{{~ if source_only ~}} and the `.nuspec` file{{~ end ~}} with the actual copyright year
 {{~ if source_only ~}}
 * For the source-only packages, update the `.nuspec` file so it represents your information.
 {{~ end ~}}

@@ -19,7 +19,7 @@
     {{~ end ~}}
     <description>A nice description of your package as you want to see it on NuGet.</description>
     <tags>your tags</tags>
-    <copyright>Copyright 2025 Your Name</copyright>
+    <copyright>Copyright (c) YEAR Your Name</copyright>
     <readme>Readme.md</readme>
   </metadata>
   <files>

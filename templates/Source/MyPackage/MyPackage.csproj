@@ -42,7 +42,7 @@
     {{~ if !azdo ~}}
     <PackageReleaseNotes>https://github.com/your-user-name/my-package/releases</PackageReleaseNotes>
     {{~ end ~}}
-    <Copyright>Copyright 2026-$([System.DateTime]::Now.ToString(yyyy)) Your Name</Copyright>
+    <Copyright>Copyright (c) YEAR Your Name</Copyright>
   </PropertyGroup>
 {{ end ~}}
 
