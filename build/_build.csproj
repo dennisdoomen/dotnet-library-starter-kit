@@ -12,13 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fallout.Common" Version="10.3.49" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.8" />
-    <PackageReference Include="NuGet.Packaging" Version="7.6.0" />
-    <PackageReference Include="Fallout.Components" Version="10.3.49" />
-    <PackageDownload Include="ReportGenerator" Version="[5.5.1]" />
-    <PackageDownload Include="GitVersion.Tool" Version="[6.5.0]" />
-    <PackageReference Include="Scriban" Version="7.2.3" />
+    <PackageReference Include="Fallout.Common" Version="10.4.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.12" />
+    <PackageReference Include="NuGet.Packaging" Version="7.9.0" />
+    <PackageReference Include="Fallout.Components" Version="10.4.0" />
+    <PackageDownload Include="ReportGenerator" Version="[5.5.11]" />
+    <PackageDownload Include="GitVersion.Tool" Version="[6.8.2]" />
+    <PackageReference Include="Scriban" Version="7.5.0" />
   </ItemGroup>
 
 </Project>
