@@ -61,7 +61,7 @@ The script [`Adopt-StarterKit.ps1`](Adopt-StarterKit.ps1) needs [PowerShell 7](h
   * the solution file, unless your repository doesn't have one.
 * It never overwrites an existing file, unless you pass `-Overwrite`. Files that are the same as the template version are skipped silently. Files that are different are listed, so you can compare them. If you prefer to merge using `git diff`, run it again with `-Overwrite`.
 * If your repository has one solution file, it:
-  * points `.nuke/parameters.json` and `Build/Build.cs` to that solution;
+  * points `.fallout/parameters.json` and `Build/Build.cs` to that solution;
   * adds the API verification test project to it;
   * adds the build project to it (for `.slnx` files only), excluded from the solution build.
 * It checks your repository and prints the steps you still need to do by hand, for example:
@@ -84,7 +84,7 @@ The script contains no hard-coded list of template files. Whatever the installed
 
    | What                     | Files                                                                                               |
    |--------------------------|-----------------------------------------------------------------------------------------------------|
-   | Build script             | `Build/`, `build.ps1`, `build.sh`, `build.cmd`, `.nuke/`, `global.json`, `GitVersion.yml`           |
+   | Build script             | `Build/`, `build.ps1`, `build.sh`, `build.cmd`, `.fallout/`, `global.json`, `GitVersion.yml`           |
    | Code style and analyzers | `.editorconfig`, `<Name>.sln.DotSettings`, and the analyzer settings in `Directory.Build.props`     |
    | API verification         | `<Name>.ApiVerificationTests/` without the `ApprovedApi` folder, `AcceptApiChanges.ps1`, `AcceptApiChanges.sh` |
    | Pipelines                | `.github/` (GitHub) or `Build/azure-pipelines.yaml` (Azure DevOps)                                  |
@@ -97,7 +97,7 @@ The script contains no hard-coded list of template files. Whatever the installed
    Don't copy the library project folder, the `.Specs` folder or the solution file. Instead, compare them with your own and take over what you need.
 
 1. Merge the properties from the template's library project (for example `<Name>/<Name>.csproj`) into yours. The package metadata, such as `PackageIcon`, `PackageReadmeFile`, `PackageLicenseFile` and the `Package files` item group, is what makes `dotnet pack` produce a complete package.
-1. If your solution file has a different name than `<Name>.slnx`, update `.nuke/parameters.json` and the `InspectCode` call in `Build/Build.cs`.
+1. If your solution file has a different name than `<Name>.slnx`, update `.fallout/parameters.json` and the `InspectCode` call in `Build/Build.cs`.
 1. Add `<Name>.ApiVerificationTests` to your solution. Optionally, also add `Build/_build.csproj`, but exclude it from the solution build.
 1. Read [After adopting](#after-adopting) below.
 

@@ -44,6 +44,7 @@ It includes:
 * Support for both GitHub and Azure DevOps Repositories/Pipelines
 * Can create projects for binary or source-only packages
 * Code coverage using [Coverlet](https://github.com/coverlet-coverage/coverlet) and [Coveralls.io](https://coveralls.io/)
+* Optional static analysis and quality gates through [SonarCloud](https://sonarcloud.io) (just add a `SONAR_TOKEN` secret to opt in)
 * Static code analysis using Roslyn analyzers [StyleCopAnalyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers), [Roslynator](https://github.com/dotnet/roslynator), [CSharpGuidelinesAnalyzer](https://github.com/bkoelman/CSharpGuidelinesAnalyzer) and [Meziantou](https://github.com/meziantou/Meziantou.Framework).
 * Auto-formatting using (a slightly opinionated) `.editorconfig` and settings honored by [JetBrains Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/)
 * A [Fallout](https://fallout.build/) C# build script that you can run locally as well as in your CI/CD pipeline
@@ -162,7 +163,7 @@ The `ApiVerificationTests` will generate a `.txt` file containing a representati
 ## Building
 
 To build this repository locally, you need the following:
-* The [.NET SDKs](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) for .NET 10.0 (see `global.json`).
+* The [.NET SDK](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) for .NET 10.0 (see `global.json`).
 * Visual Studio, JetBrains Rider or Visual Studio Code with the C# DevKit
 
 You can also build, run the unit tests and package the code using the following command-line:
