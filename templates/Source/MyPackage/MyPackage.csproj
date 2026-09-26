@@ -42,7 +42,7 @@
     {{~ if !azdo ~}}
     <PackageReleaseNotes>https://github.com/your-user-name/my-package/releases</PackageReleaseNotes>
     {{~ end ~}}
-    <Copyright>Copyright 2026-$([System.DateTime]::Now.ToString(yyyy)) Your Name</Copyright>
+    <Copyright>Copyright (c) YEAR Your Name</Copyright>
   </PropertyGroup>
 {{ end ~}}
 
@@ -53,6 +53,15 @@
     {{~ end ~}}
     <None Include="..\PackageReadme.md" Pack="true" PackagePath="Readme.md"/>
   </ItemGroup>
+{{~ if !source_only ~}}
+
+  <ItemGroup Label="Polyfills">
+    <PackageReference Include="PolySharp" Version="1.16.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+{{~ end ~}}
 
   <ItemGroup Label="Internals visible to">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
