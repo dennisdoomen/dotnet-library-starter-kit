@@ -54,6 +54,9 @@ class Build : FalloutBuild
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "Artifacts";
 
+    [PathVariable]
+    readonly Tool Pwsh;
+
     string SemVer;
 
     Target CalculateNugetVersion => _ => _
@@ -337,9 +340,23 @@ class Build : FalloutBuild
                     {
                         Error($"Template {templateName} failed to create proper project structure");
                     }
+
+                    AssertDependencyUpdater(actualProjectDirectory, expectDependabot: true);
                 }
 
+                // Verify that choosing Renovate replaces the Dependabot configuration
+                var renovateTestDirectory = testDirectory / "renovate";
+                renovateTestDirectory.DeleteDirectory();
+                renovateTestDirectory.CreateDirectory();
+
+                DotNet("new oss-nuget-class-library-sln --name TestLibrary --dependency-updater renovate --force",
+                    workingDirectory: renovateTestDirectory);
+
+                AssertDependencyUpdater(renovateTestDirectory / "TestLibrary", expectDependabot: false);
+
                 Information("All template installations and builds completed successfully");
+
+                TestAdoptionByExistingLibrary(testDirectory / "existing");
             }
             finally
             {
@@ -355,6 +372,43 @@ class Build : FalloutBuild
                 }
             }
         });
+
+    /// <summary>
+    /// Runs Adopt-StarterKit.ps1 against a minimal existing library and checks that the build script and the
+    /// API verification tests work, so that the adoption guide doesn't silently go stale.
+    /// </summary>
+    void TestAdoptionByExistingLibrary(AbsolutePath repositoryDirectory)
+    {
+        const string libraryName = "Acme.Widgets";
+
+        Information("Testing adoption of the starter kit by an existing library");
+
+        repositoryDirectory.CreateOrCleanDirectory();
+
+        DotNet($"new sln --name {libraryName}", workingDirectory: repositoryDirectory);
+        DotNet($"new classlib --name {libraryName} --output {libraryName} --framework net10.0", workingDirectory: repositoryDirectory);
+        DotNet($"sln {libraryName}.slnx add {libraryName}/{libraryName}.csproj", workingDirectory: repositoryDirectory);
+
+        // We don't create a separate Git repository, so that GitVersion uses the history of this repository.
+        // In a nested repository, GitVersion would look for the pull request branch that GitHub Actions reports.
+        Pwsh($"-NoProfile -File {RootDirectory / "Adopt-StarterKit.ps1"} -Template nooss-nuget-class-library-sln -Name {libraryName}",
+            workingDirectory: repositoryDirectory);
+
+        // The first run creates the received API snapshot, which we then accept
+        try
+        {
+            Pwsh("-NoProfile -File ./build.ps1 ApiChecks", workingDirectory: repositoryDirectory, logOutput: false);
+        }
+        catch (ProcessException)
+        {
+            // Expected, because there is no approved API snapshot yet
+        }
+
+        Pwsh("-NoProfile -File ./AcceptApiChanges.ps1", workingDirectory: repositoryDirectory);
+        Pwsh("-NoProfile -File ./build.ps1 ApiChecks", workingDirectory: repositoryDirectory);
+
+        Information("Successfully adopted the starter kit in an existing library");
+    }
 
     Target TestTemplateBuild => _ => _
         .DependsOn(Pack)
@@ -400,7 +454,17 @@ class Build : FalloutBuild
     Target Default => _ => _
         .DependsOn(Push);
 
-    bool IsPullRequest => GitHubActions?.IsPullRequest ?? false;
+    static void AssertDependencyUpdater(AbsolutePath projectDirectory, bool expectDependabot)
+    {
+        bool hasDependabot = (projectDirectory / ".github" / "dependabot.yml").FileExists();
+        bool hasRenovate = (projectDirectory / ".github" / "renovate.json").FileExists();
+
+        Assert.True(hasDependabot == expectDependabot && hasRenovate != expectDependabot,
+            $"Expected only {(expectDependabot ? "dependabot.yml" : "renovate.json")} in {projectDirectory}, " +
+            $"but found dependabot.yml={hasDependabot} and renovate.json={hasRenovate}");
+    }
+
+    bool IsPullRequest =>GitHubActions?.IsPullRequest ?? false;
 
     bool IsTag => BranchSpec != null && BranchSpec.Contains("refs/tags", StringComparison.OrdinalIgnoreCase);
 }
