@@ -68,12 +68,4 @@
     </AssemblyAttribute>
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\MyPackage.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\MyPackage.xml</DocumentationFile>
-    </PropertyGroup>
-
 </Project>
