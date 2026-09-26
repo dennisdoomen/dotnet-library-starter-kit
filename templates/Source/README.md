@@ -68,6 +68,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 * Configure NuGet auditing (see next paragraph)
 * Fine-tune the allowed open-source licenses and packages in the `.\packageguard\config.json`
 * Store the PackageGuard cache that appears under `.\packageguard` after a first build in source control to speed-up successive runs
+* The build generates a CycloneDX Software Bill of Materials (SBOM) under `Artifacts\bom.json`. Skip this with `-skip GenerateSbom` if you don't need it
 {{~ if open_source ~}}
 * Adjust the `funding.yml` to allow people to sponsor your project
 * Review the code of conduct to see if it matches your opinions
