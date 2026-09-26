@@ -6,6 +6,9 @@
     <Build Project="false" />
   </Project>
   <Project Path="MyPackage.ApiVerificationTests/MyPackage.ApiVerificationTests.csproj" />
+  <!--#if (benchmarks) -->
+  <Project Path="MyPackage.Benchmarks/MyPackage.Benchmarks.csproj" />
+  <!--#endif -->
   <Project Path="MyPackage.Specs/MyPackage.Specs.csproj" />
   <Project Path="MyPackage/MyPackage.csproj" />
 </Solution>

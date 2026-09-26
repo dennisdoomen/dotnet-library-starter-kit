@@ -56,6 +56,7 @@ It includes:
 * A test project using [xUnit](https://xunit.net/) and [Fluent Assertions 7](https://fluentassertions.com/)
 * Validation of the public API of the library against snapshots using [Verify](https://github.com/VerifyTests/Verify)
 * NuGet auditing using .NET built-in auditing capabilities
+* An optional benchmark project using [BenchmarkDotNet](https://benchmarkdotnet.org/)
 * NuGet package and licensing scanning through [PackageGuard](https://github.com/dennisdoomen/packageguard?tab=readme-ov-file#readme)
 
 ### What's so special about that?
@@ -122,6 +123,7 @@ dotnet new update
    dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
     ```
 
+1. Optionally, add `--benchmarks true` to any of these commands to include a [BenchmarkDotNet](https://benchmarkdotnet.org/) project with an example benchmark. You can run the benchmarks using `build.ps1 RunBenchmarks`. This target is never part of the normal build, because benchmarks are slow and their results are not reliable on shared CI agents.
 1. Make the necessary changes to the generated code (see next section)
 1. Commit the changes to your repository into a new commit. Without it, the build script will crash on generating the version number.
 1. Run `build.ps1` to build the code, run the tests, and package the library into a NuGet package in the `Artifacts` directory.

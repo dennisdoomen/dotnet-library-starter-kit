@@ -63,6 +63,9 @@ The template makes a lot of assumptions, so after generating the project, there'
 {{~ end ~}}
 * Alter the coverage service that is being used.
 * Determine if you want to use API verification against snapshots
+<!--#if (benchmarks) -->
+* Replace the example benchmark in `MyPackage.Benchmarks` with benchmarks for your library and run them using `build.ps1 RunBenchmarks`
+<!--#endif -->
 * Study the Nuke `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
 * See if all dependencies are up-to-date
 * Configure NuGet auditing (see next paragraph)

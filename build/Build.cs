@@ -304,7 +304,9 @@ class Build : FalloutBuild
                     "nooss-nuget-class-library-sln",
                     "nooss-source-only-nuget-class-library-sln",
                     "oss-nuget-class-library-sln",
-                    "oss-source-only-nuget-class-library-sln"
+                    "oss-source-only-nuget-class-library-sln",
+                    "oss-nuget-class-library-sln --benchmarks true",
+                    "oss-source-only-nuget-class-library-sln --benchmarks true"
                 ];
 
                 foreach (string templateName in templateShortNames)
@@ -316,7 +318,7 @@ class Build : FalloutBuild
                     Information("Testing template: {Template}", templateName);
 
                     // Create project from template
-                    DotNet($"new {templateName} --name TestLibrary --force", workingDirectory: projectTestDirectory);
+                    DotNet($"new {templateName:nq} --name TestLibrary --force", workingDirectory: projectTestDirectory);
 
                     // Build the generated project to ensure it compiles without errors
                     // Note: template uses preferNameDirectory=true, so project is created in TestLibrary subdirectory

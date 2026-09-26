@@ -8,19 +8,40 @@
     },
     "sourceName": "MyPackage",
     "preferNameDirectory": true,
+    "SpecialCustomOperations": {
+      "**/*.{slnx,md}": {
+        "operations": [
+          {
+            "type": "conditional",
+            "configuration": {
+              "actionableIf": [ "<!--#if" ],
+              "actionableElse": [ "#else", "<!--#else" ],
+              "actionableElseif": [ "#elseif", "<!--#elseif" ],
+              "endif": [ "#endif", "<!--#endif" ],
+              "trim": "true",
+              "wholeLine": "true"
+            }
+          }
+        ]
+      }
+    },
     "sources": [
       {
         "modifiers": [
           {
             "exclude": [ "src/.idea/**", ".template_config/**" ]
+          },
+          {
+            "condition": "(!benchmarks)",
+            "exclude": [ "MyPackage.Benchmarks/**" ]
           }
         ],
         "source": "./",
         "target": "./"
       }
     ],
-{{~ if azdo ~}}
     "symbols": {
+{{~ if azdo ~}}
       "organization": {
         "type": "parameter",
         "dataType": "string",
@@ -36,9 +57,15 @@
         "description": "The Azure DevOps project name, e.g. MyProject",
         "replaces": "MyProject",
         "isRequired": true
+      },
+{{~ end ~}}
+      "benchmarks": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "false",
+        "description": "Adds a BenchmarkDotNet project and a RunBenchmarks build target"
       }
     },
-{{~ end ~}}
 {{~ if !source_only && azdo ~}}
     "identity": "DeDo.AzdoLibrary.Template",
     "name": "Class Library NuGet Azure DevOps Solution",
