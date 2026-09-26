@@ -59,6 +59,7 @@ It includes:
 * Validation of the public API of the library against snapshots using [Verify](https://github.com/VerifyTests/Verify)
 * NuGet auditing using .NET built-in auditing capabilities
 * NuGet package and licensing scanning through [PackageGuard](https://github.com/dennisdoomen/packageguard?tab=readme-ov-file#readme)
+* Software Bill of Materials (SBOM) generation using [CycloneDX](https://github.com/CycloneDX/cyclonedx-dotnet), attested the same way as the NuGet package
 
 ### What's so special about that?
 

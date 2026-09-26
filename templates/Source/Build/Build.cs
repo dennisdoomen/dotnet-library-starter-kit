@@ -75,6 +75,9 @@ class Build : FalloutBuild
     [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
     Tool InspectCode;
 
+    [NuGetPackage("CycloneDX", "CycloneDX.dll")]
+    Tool CycloneDx;
+
     string SemVer;
 
     Target CalculateNugetVersion => _ => _
@@ -177,6 +180,13 @@ class Build : FalloutBuild
             PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching {RootDirectory}");
         });
 
+    Target GenerateSbom => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            CycloneDx($"{Solution} -o {ArtifactsDirectory} -t -F Json --disable-package-restore");
+        });
+
     Target GenerateCodeCoverageReport => _ => _
         .DependsOn(RunTests)
         .Executes(() =>
@@ -255,6 +265,7 @@ class Build : FalloutBuild
 
     Target Pack => _ => _
         .DependsOn(ScanPackages)
+        .DependsOn(GenerateSbom)
         .DependsOn(PreparePackageReadme)
         .DependsOn(CalculateNugetVersion)
         .DependsOn(ApiChecks)

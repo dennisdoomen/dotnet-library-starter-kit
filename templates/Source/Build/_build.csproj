@@ -20,6 +20,7 @@
     <PackageDownload Include="GitVersion.Tool" Version="[6.8.2]" />
     <PackageDownload Include="PackageGuard" Version="[2.7.3]" />
     <PackageDownload Include="JetBrains.ReSharper.GlobalTools" Version="[2026.2.2]" />
+    <PackageDownload Include="CycloneDX" Version="[6.2.0]" />
   </ItemGroup>
 
 </Project>
