@@ -13,7 +13,19 @@
         "modifiers": [
           {
             "exclude": [ "src/.idea/**", ".template_config/**" ]
+{{~ if azdo ~}}
           }
+{{~ else ~}}
+          },
+          {
+            "condition": "(dependencyUpdater == \"renovate\")",
+            "exclude": [ ".github/dependabot.yml" ]
+          },
+          {
+            "condition": "(dependencyUpdater == \"dependabot\")",
+            "exclude": [ ".github/renovate.json" ]
+          }
+{{~ end ~}}
         ],
         "source": "./",
         "target": "./"
@@ -36,6 +48,25 @@
         "description": "The Azure DevOps project name, e.g. MyProject",
         "replaces": "MyProject",
         "isRequired": true
+      }
+    },
+{{~ else ~}}
+    "symbols": {
+      "dependencyUpdater": {
+        "type": "parameter",
+        "datatype": "choice",
+        "choices": [
+          {
+            "choice": "dependabot",
+            "description": "Use Dependabot, which is built into GitHub"
+          },
+          {
+            "choice": "renovate",
+            "description": "Use Renovate, which requires the Renovate GitHub App on the repository or organization"
+          }
+        ],
+        "defaultValue": "dependabot",
+        "description": "The tool that keeps the NuGet packages, the .NET SDK and the GitHub Actions up-to-date"
       }
     },
 {{~ end ~}}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Europe/Copenhagen",
+  "schedule": [
+    "after 4pm on monday"
+  ],
+  "packageRules": [
+    {
+      "groupName": "analyzers",
+      "matchPackageNames": [
+        "CSharpGuidelinesAnalyzer",
+        "Meziantou.Analyzer",
+        "Microsoft.CodeAnalysis.BannedApiAnalyzers",
+        "Roslynator.Analyzers",
+        "StyleCop.Analyzers"
+      ]
+    },
+    {
+      "groupName": "xUnit",
+      "matchPackageNames": [
+        "xunit.v3",
+        "xunit.runner.visualstudio"
+      ]
+    },
+    {
+      "groupName": "Verify",
+      "matchPackageNames": [
+        "Verify.*"
+      ]
+    },
+    {
+      "groupName": "Fallout",
+      "matchPackageNames": [
+        "Fallout.*"
+      ]
+    },
+    {
+      "groupName": ".NET SDK",
+      "matchDatasources": [
+        "dotnet-version"
+      ]
+    },
+{{~ if !open_source ~}}
+    {
+      "description": "Fluent Assertions 8 and later require a commercial license for non-open-source projects",
+      "matchPackageNames": [
+        "FluentAssertions"
+      ],
+      "allowedVersions": "<8.0.0"
+    },
+{{~ end ~}}
+    {
+      "description": "Automerge low-risk patch updates of analyzers, test and build dependencies",
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "matchPackageNames": [
+        "CSharpGuidelinesAnalyzer",
+        "Meziantou.Analyzer",
+        "Microsoft.CodeAnalysis.BannedApiAnalyzers",
+        "Roslynator.Analyzers",
+        "StyleCop.Analyzers",
+        "xunit.v3",
+        "xunit.runner.visualstudio",
+        "Verify.*",
+        "FluentAssertions",
+        "Microsoft.NET.Test.Sdk",
+        "coverlet.collector",
+        "PublicApiGenerator",
+        "Fallout.*"
+      ],
+      "automerge": true
+    }
+  ]
+}
