@@ -55,9 +55,6 @@ class Build : FalloutBuild
     AbsolutePath ArtifactsDirectory => RootDirectory / "Artifacts";
 
     [PathVariable]
-    readonly Tool Git;
-
-    [PathVariable]
     readonly Tool Pwsh;
 
     string SemVer;
@@ -378,13 +375,10 @@ class Build : FalloutBuild
         DotNet($"new classlib --name {libraryName} --output {libraryName} --framework net10.0", workingDirectory: repositoryDirectory);
         DotNet($"sln {libraryName}.slnx add {libraryName}/{libraryName}.csproj", workingDirectory: repositoryDirectory);
 
-        Git("init", workingDirectory: repositoryDirectory);
-        CommitAll(repositoryDirectory, "Existing library");
-
+        // We don't create a separate Git repository, so that GitVersion uses the history of this repository.
+        // In a nested repository, GitVersion would look for the pull request branch that GitHub Actions reports.
         Pwsh($"-NoProfile -File {RootDirectory / "Adopt-StarterKit.ps1"} -Template nooss-nuget-class-library-sln -Name {libraryName}",
             workingDirectory: repositoryDirectory);
-
-        CommitAll(repositoryDirectory, "Adopt the starter kit");
 
         // The first run creates the received API snapshot, which we then accept
         try
@@ -400,13 +394,6 @@ class Build : FalloutBuild
         Pwsh("-NoProfile -File ./build.ps1 ApiChecks", workingDirectory: repositoryDirectory);
 
         Information("Successfully adopted the starter kit in an existing library");
-    }
-
-    void CommitAll(AbsolutePath repositoryDirectory, string message)
-    {
-        Git("-c core.safecrlf=false add --all", workingDirectory: repositoryDirectory);
-        Git($"-c user.name=Build -c user.email=build@localhost commit --quiet --message {message:dq}",
-            workingDirectory: repositoryDirectory);
     }
 
     Target TestTemplateBuild => _ => _
