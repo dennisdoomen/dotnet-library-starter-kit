@@ -1,0 +1,25 @@
+[*.cs]
+
+# Purpose: Make public types internal
+# Reason: BenchmarkDotNet requires benchmark classes to be public
+dotnet_diagnostic.CA1515.severity = none
+
+# Purpose: Member 'Method' does not access instance data and can be marked as static
+# Reason: BenchmarkDotNet requires benchmark methods to be instance methods
+dotnet_diagnostic.CA1822.severity = none
+
+# Purpose: Type 'SuperClass' can be sealed
+# Reason: BenchmarkDotNet generates classes that derive from the benchmark classes
+dotnet_diagnostic.CA1852.severity = none
+
+# Purpose: XML comment analysis is disabled due to project configuration
+# Reason: We don't need the documentation from the benchmarks
+dotnet_diagnostic.SA0001.severity = none
+
+# Purpose: Elements must be documented
+# Reason: Not needed for benchmarks
+dotnet_diagnostic.SA1600.severity = none
+
+# Purpose: Class is never instantiated (non-private accessibility)
+# Reason: BenchmarkDotNet instantiates the benchmark classes through reflection
+resharper_class_never_instantiated_global_highlighting=none

@@ -49,6 +49,8 @@ It includes:
 * Auto-formatting using (a slightly opinionated) `.editorconfig` and settings honored by [JetBrains Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/)
 * A [Fallout](https://fallout.build/) C# build script that you can run locally as well as in your CI/CD pipeline
 * A GitHub Actions workflow that builds, tests, packages and publishes your library
+* Dependency updates using Dependabot or, optionally, [Renovate](https://docs.renovatebot.com/)
+* A CodeQL workflow (GitHub templates only) that scans for security vulnerabilities on pull requests, pushes to `main` and a weekly schedule
 * GitHub issue templates to streamline bug reporting and feature requests
 * An extensive read-me
 * Automatic versioning using [GitVersion](https://gitversion.net/) and tagging
@@ -57,7 +59,9 @@ It includes:
 * A test project using [xUnit](https://xunit.net/) and [Fluent Assertions 7](https://fluentassertions.com/)
 * Validation of the public API of the library against snapshots using [Verify](https://github.com/VerifyTests/Verify)
 * NuGet auditing using .NET built-in auditing capabilities
+* An optional benchmark project using [BenchmarkDotNet](https://benchmarkdotnet.org/)
 * NuGet package and licensing scanning through [PackageGuard](https://github.com/dennisdoomen/packageguard?tab=readme-ov-file#readme)
+* Software Bill of Materials (SBOM) generation using [CycloneDX](https://github.com/CycloneDX/cyclonedx-dotnet), attested the same way as the NuGet package
 
 ### What's so special about that?
 
@@ -123,6 +127,15 @@ dotnet new update
    dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
     ```
 
+    The GitHub templates use [Dependabot](https://docs.github.com/en/code-security/dependabot) to keep the NuGet packages and GitHub Actions up-to-date. If you prefer [Renovate](https://docs.renovatebot.com/), add `--dependency-updater renovate`. You get a `.github/renovate.json` instead of `.github/dependabot.yml`, so you don't get duplicate pull requests. It groups related updates (such as all analyzers or all xUnit packages) into one pull request, updates the .NET SDK in `global.json`, and automatically merges patch updates of analyzers, test and build packages.
+
+    ```
+   dotnet new oss-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --dependency-updater renovate
+    ```
+
+    Renovate only works after you install the [Renovate GitHub App](https://github.com/apps/renovate) on your repository or organization. That is why Dependabot is the default. The Azure DevOps templates do not have this option.
+
+1. Optionally, add `--benchmarks true` to any of these commands to include a [BenchmarkDotNet](https://benchmarkdotnet.org/) project with an example benchmark. You can run the benchmarks using `build.ps1 RunBenchmarks`. This target is never part of the normal build, because benchmarks are slow and their results are not reliable on shared CI agents.
 1. Make the necessary changes to the generated code (see next section)
 1. Commit the changes to your repository into a new commit. Without it, the build script will crash on generating the version number.
 1. Run `build.ps1` to build the code, run the tests, and package the library into a NuGet package in the `Artifacts` directory.
@@ -130,6 +143,10 @@ dotnet new update
 ### What to do after that
 
 The generated solution contains a read-me that provides additional tips to get started. 
+
+### Adopting the starter kit in an existing library
+
+Already have a library with users? You don't have to start again. The [adoption guide](https://github.com/dennisdoomen/dotnet-library-starter-kit/blob/main/ADOPTING.md) explains how to add the build script, analyzers, API verification and pipelines to an existing repository. It includes a script that does most of the work for you.
 
 ## Additional things to be aware of
 
@@ -146,7 +163,7 @@ The `ApiVerificationTests` will generate a `.txt` file containing a representati
 ## Building
 
 To build this repository locally, you need the following:
-* The [.NET SDKs](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) for .NET 4.7, 6.0 and 8.0.
+* The [.NET SDKs](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) for .NET 10.0 (see `global.json`).
 * Visual Studio, JetBrains Rider or Visual Studio Code with the C# DevKit
 
 You can also build, run the unit tests and package the code using the following command-line:

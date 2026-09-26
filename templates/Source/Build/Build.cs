@@ -27,11 +27,6 @@ using static Serilog.Log;
 
 class Build : FalloutBuild
 {
-    /// Support plugins are available for:
-    ///   - JetBrains ReSharper        https://nuke.build/resharper
-    ///   - JetBrains Rider            https://nuke.build/rider
-    ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-    ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.Default);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -102,6 +97,9 @@ class Build : FalloutBuild
 
     [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
     Tool InspectCode;
+
+    [NuGetPackage("CycloneDX", "CycloneDX.dll")]
+    Tool CycloneDx;
 
     string SemVer;
 
@@ -218,12 +216,39 @@ class Build : FalloutBuild
                 .AddLoggers($"trx;LogFileName={project!.Name}.trx"));
         });
 
+//#if (benchmarks)
+    [Parameter("The filter that selects the benchmarks to run - Default is '*' (all benchmarks)")]
+    readonly string BenchmarkFilter = "*";
+
+    AbsolutePath BenchmarkResultsDirectory => ArtifactsDirectory / "Benchmarks";
+
+    // Not part of the Default target on purpose. Benchmarks are slow and their results are meaningless on shared CI agents.
+    Target RunBenchmarks => _ => _
+        .Executes(() =>
+        {
+            DotNetRun(s => s
+                .SetProjectFile(Solution.GetProject("MyPackage.Benchmarks"))
+                // BenchmarkDotNet refuses to run on non-optimized builds
+                .SetConfiguration(Configuration.Release)
+                .SetApplicationArguments("--filter", BenchmarkFilter, "--artifacts", BenchmarkResultsDirectory));
+
+            Information("Benchmark results: {directory}", BenchmarkResultsDirectory / "results");
+        });
+
+//#endif
     Target ScanPackages => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
             Environment.SetEnvironmentVariable("GITHUB_API_KEY", GitHubApiKey);
             PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching {RootDirectory}");
+        });
+
+    Target GenerateSbom => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            CycloneDx($"{Solution} -o {ArtifactsDirectory} -t -F Json --disable-package-restore");
         });
 
     Target GenerateCodeCoverageReport => _ => _
@@ -315,6 +340,7 @@ class Build : FalloutBuild
 
     Target Pack => _ => _
         .DependsOn(ScanPackages)
+        .DependsOn(GenerateSbom)
         .DependsOn(PreparePackageReadme)
         .DependsOn(CalculateNugetVersion)
         .DependsOn(ApiChecks)
