@@ -130,6 +130,10 @@ dotnet new update
 
 The generated solution contains a read-me that provides additional tips to get started. 
 
+### Adopting the starter kit in an existing library
+
+Already have a library with users? You don't have to start again. The [adoption guide](https://github.com/dennisdoomen/dotnet-library-starter-kit/blob/main/ADOPTING.md) explains how to add the build script, analyzers, API verification and pipelines to an existing repository. It includes a script that does most of the work for you.
+
 ## Additional things to be aware of
 
 ### About NuGet auditing
