@@ -101,13 +101,6 @@
         "Verbosity": {
           "description": "Logging verbosity during build execution. Default is 'Normal'",
           "$ref": "#/definitions/Verbosity"
-        },
-        "BuildProjectFile": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "description": "Path to the build project (.csproj) relative to the repository root. Defaults to 'build/_build.csproj' when unset. Read by the Fallout global tool's in-tool runner."
         }
       }
     }
@@ -117,11 +110,11 @@
       "properties": {
         "Configuration": {
           "type": "string",
+          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
           "enum": [
             "Debug",
             "Release"
-          ],
-          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)"
+          ]
         },
         "CSharpGuidelinesVersion": {
           "type": "string",
@@ -130,12 +123,12 @@
         "GitHubApiKey": {
           "type": "string",
           "description": "The key to use for scanning packages on GitHub",
-          "default": "Secrets must be entered via 'fallout :secrets [profile]'"
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "NuGetApiKey": {
           "type": "string",
           "description": "The key to push to Nuget",
-          "default": "Secrets must be entered via 'fallout :secrets [profile]'"
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Solution": {
           "type": "string",
