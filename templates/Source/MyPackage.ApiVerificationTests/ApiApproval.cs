@@ -48,7 +48,8 @@ public class ApiApproval
         {
             var csproj = SourcePath / "MyPackage" / "MyPackage.csproj";
             var project = XDocument.Load(csproj);
-            var targetFrameworks = project.XPathSelectElement("/Project/PropertyGroup/TargetFrameworks");
+            var targetFrameworks = project.XPathSelectElement("/Project/PropertyGroup/TargetFrameworks")
+                ?? project.XPathSelectElement("/Project/PropertyGroup/TargetFramework");
             AddRange(targetFrameworks!.Value.Split(';'));
         }
     }
