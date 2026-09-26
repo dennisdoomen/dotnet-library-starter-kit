@@ -48,6 +48,7 @@ It includes:
 * Auto-formatting using (a slightly opinionated) `.editorconfig` and settings honored by [JetBrains Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/)
 * A [Fallout](https://fallout.build/) C# build script that you can run locally as well as in your CI/CD pipeline
 * A GitHub Actions workflow that builds, tests, packages and publishes your library
+* Dependency updates using Dependabot or, optionally, [Renovate](https://docs.renovatebot.com/)
 * A CodeQL workflow (GitHub templates only) that scans for security vulnerabilities on pull requests, pushes to `main` and a weekly schedule
 * GitHub issue templates to streamline bug reporting and feature requests
 * An extensive read-me
@@ -122,6 +123,14 @@ dotnet new update
     ```
    dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
     ```
+
+    The GitHub templates use [Dependabot](https://docs.github.com/en/code-security/dependabot) to keep the NuGet packages and GitHub Actions up-to-date. If you prefer [Renovate](https://docs.renovatebot.com/), add `--dependency-updater renovate`. You get a `.github/renovate.json` instead of `.github/dependabot.yml`, so you don't get duplicate pull requests. It groups related updates (such as all analyzers or all xUnit packages) into one pull request, updates the .NET SDK in `global.json`, and automatically merges patch updates of analyzers, test and build packages.
+
+    ```
+   dotnet new oss-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --dependency-updater renovate
+    ```
+
+    Renovate only works after you install the [Renovate GitHub App](https://github.com/apps/renovate) on your repository or organization. That is why Dependabot is the default. The Azure DevOps templates do not have this option.
 
 1. Make the necessary changes to the generated code (see next section)
 1. Commit the changes to your repository into a new commit. Without it, the build script will crash on generating the version number.
