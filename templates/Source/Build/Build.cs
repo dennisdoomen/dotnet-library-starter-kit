@@ -172,6 +172,26 @@ class Build : FalloutBuild
                 .AddLoggers($"trx;LogFileName={project!.Name}.trx"));
         });
 
+//#if (benchmarks)
+    [Parameter("The filter that selects the benchmarks to run - Default is '*' (all benchmarks)")]
+    readonly string BenchmarkFilter = "*";
+
+    AbsolutePath BenchmarkResultsDirectory => ArtifactsDirectory / "Benchmarks";
+
+    // Not part of the Default target on purpose. Benchmarks are slow and their results are meaningless on shared CI agents.
+    Target RunBenchmarks => _ => _
+        .Executes(() =>
+        {
+            DotNetRun(s => s
+                .SetProjectFile(Solution.GetProject("MyPackage.Benchmarks"))
+                // BenchmarkDotNet refuses to run on non-optimized builds
+                .SetConfiguration(Configuration.Release)
+                .SetApplicationArguments("--filter", BenchmarkFilter, "--artifacts", BenchmarkResultsDirectory));
+
+            Information("Benchmark results: {directory}", BenchmarkResultsDirectory / "results");
+        });
+
+//#endif
     Target ScanPackages => _ => _
         .DependsOn(Compile)
         .Executes(() =>
