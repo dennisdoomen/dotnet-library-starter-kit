@@ -335,7 +335,19 @@ class Build : FalloutBuild
                     {
                         Error($"Template {templateName} failed to create proper project structure");
                     }
+
+                    AssertDependencyUpdater(actualProjectDirectory, expectDependabot: true);
                 }
+
+                // Verify that choosing Renovate replaces the Dependabot configuration
+                var renovateTestDirectory = testDirectory / "renovate";
+                renovateTestDirectory.DeleteDirectory();
+                renovateTestDirectory.CreateDirectory();
+
+                DotNet("new oss-nuget-class-library-sln --name TestLibrary --dependency-updater renovate --force",
+                    workingDirectory: renovateTestDirectory);
+
+                AssertDependencyUpdater(renovateTestDirectory / "TestLibrary", expectDependabot: false);
 
                 Information("All template installations and builds completed successfully");
             }
@@ -398,7 +410,17 @@ class Build : FalloutBuild
     Target Default => _ => _
         .DependsOn(Push);
 
-    bool IsPullRequest => GitHubActions?.IsPullRequest ?? false;
+    static void AssertDependencyUpdater(AbsolutePath projectDirectory, bool expectDependabot)
+    {
+        bool hasDependabot = (projectDirectory / ".github" / "dependabot.yml").FileExists();
+        bool hasRenovate = (projectDirectory / ".github" / "renovate.json").FileExists();
+
+        Assert.True(hasDependabot == expectDependabot && hasRenovate != expectDependabot,
+            $"Expected only {(expectDependabot ? "dependabot.yml" : "renovate.json")} in {projectDirectory}, " +
+            $"but found dependabot.yml={hasDependabot} and renovate.json={hasRenovate}");
+    }
+
+    bool IsPullRequest =>GitHubActions?.IsPullRequest ?? false;
 
     bool IsTag => BranchSpec != null && BranchSpec.Contains("refs/tags", StringComparison.OrdinalIgnoreCase);
 }
