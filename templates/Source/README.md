@@ -146,7 +146,7 @@ Then, install the package using the following command-line:
 ## Building
 
 To build this repository locally, you need the following:
-* The [.NET SDKs](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) for .NET 10.0 (see `global.json`) and the .NET Framework 4.7 developer pack.
+* The [.NET SDK](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks) for .NET 10.0 (see `global.json`) and the .NET Framework 4.7 developer pack.
 * Visual Studio, JetBrains Rider or Visual Studio Code with the C# DevKit
 
 You can also build, run the unit tests and package the code using the following command-line:
