@@ -75,9 +75,6 @@ class Build : FalloutBuild
     [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
     Tool InspectCode;
 
-    [NuGetPackage("CycloneDX", "CycloneDX.dll")]
-    Tool CycloneDx;
-
     string SemVer;
 
     Target CalculateNugetVersion => _ => _
@@ -197,14 +194,10 @@ class Build : FalloutBuild
         .Executes(() =>
         {
             Environment.SetEnvironmentVariable("GITHUB_API_KEY", GitHubApiKey);
-            PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching {RootDirectory}");
-        });
-
-    Target GenerateSbom => _ => _
-        .DependsOn(Compile)
-        .Executes(() =>
-        {
-            CycloneDx($"{Solution} -o {ArtifactsDirectory} -t -F Json --disable-package-restore");
+            PackageGuard($"--config-path={RootDirectory / ".packageguard" / "config.json"} --use-caching " +
+                $"--report-risk {ArtifactsDirectory / "PackageRisk.sarif"} " +
+                $"--sbom cyclonedx --sbom-output {ArtifactsDirectory / "bom.json"} " +
+                $"{RootDirectory}");
         });
 
     Target GenerateCodeCoverageReport => _ => _
@@ -285,7 +278,6 @@ class Build : FalloutBuild
 
     Target Pack => _ => _
         .DependsOn(ScanPackages)
-        .DependsOn(GenerateSbom)
         .DependsOn(PreparePackageReadme)
         .DependsOn(CalculateNugetVersion)
         .DependsOn(ApiChecks)
