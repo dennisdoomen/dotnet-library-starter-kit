@@ -19,6 +19,9 @@ using static Serilog.Log;
 
 class Build : FalloutBuild
 {
+    static readonly string[] TemplateVariantNames =
+        ["Normal", "SourceOnly", "NormalOss", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
+
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
     ///   - JetBrains Rider            https://nuke.build/rider
@@ -141,8 +144,7 @@ class Build : FalloutBuild
                 PackageReadme = true,
             });
 
-            string[] names = ["Normal", "SourceOnly", "NormalOss", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
-            foreach (string name in names)
+            foreach (string name in TemplateVariantNames)
             {
                 (ArtifactsDirectory / "templates" / name / "PackageReadme.md").WriteAllText(readmeContents);
             }
@@ -187,8 +189,7 @@ class Build : FalloutBuild
             }
 
             // Write into every template variant
-            string[] variantNames = ["Normal", "NormalOss", "SourceOnly", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
-            foreach (string variant in variantNames)
+            foreach (string variant in TemplateVariantNames)
             {
                 var skillsDir = ArtifactsDirectory / "templates" / variant / ".agents" / "skills" / "csharp-guidelines";
                 skillsDir.CreateOrCleanDirectory();
@@ -302,46 +303,66 @@ class Build : FalloutBuild
                 // Install the locally built package with force flag
                 DotNet($"new install {packageFile} --force", workingDirectory: testDirectory);
 
-                // Test each template variant by creating and building a test project
-                string[] templateShortNames = [
-                    "nooss-nuget-class-library-sln",
-                    "nooss-source-only-nuget-class-library-sln",
-                    "oss-nuget-class-library-sln",
-                    "oss-source-only-nuget-class-library-sln",
-                    "oss-nuget-class-library-sln --benchmarks true",
-                    "oss-source-only-nuget-class-library-sln --benchmarks true"
-                ];
+                // Test each template variant by creating and building a test project. The short names are read from
+                // the rendered template.json files, so a newly added variant cannot be forgotten here.
+                string[] templateShortNames = TemplateVariantNames
+                    .Select(name => ArtifactsDirectory / "templates" / name / ".template.config" / "template.json")
+                    .Select(templateJsonFile => JsonDocument.Parse(templateJsonFile.ReadAllText())
+                        .RootElement.GetProperty("shortName").GetString())
+                    .ToArray();
 
-                foreach (string templateName in templateShortNames)
+                // The Azure DevOps templates require an organization and project, which also exercises their
+                // symbol replacement. The OSS templates are additionally tested with the optional benchmarks flag.
+                string[] templateArguments = templateShortNames
+                    .Select(shortName => shortName.StartsWith("azdo-", StringComparison.Ordinal)
+                        ? $"{shortName} --organization TestOrganization --projectName TestProject"
+                        : shortName)
+                    .Concat([
+                        "oss-nuget-class-library-sln --benchmarks true",
+                        "oss-source-only-nuget-class-library-sln --benchmarks true"
+                    ])
+                    .ToArray();
+
+                foreach (string templateArgument in templateArguments)
                 {
+                    string shortName = templateArgument.Split(' ')[0];
+                    bool isAzdo = shortName.StartsWith("azdo-", StringComparison.Ordinal);
+
                     var projectTestDirectory = testDirectory / $"solution";
                     projectTestDirectory.DeleteDirectory();
                     projectTestDirectory.CreateDirectory();
 
-                    Information("Testing template: {Template}", templateName);
+                    Information("Testing template: {Template}", templateArgument);
 
                     // Create project from template
-                    DotNet($"new {templateName:nq} --name TestLibrary --force", workingDirectory: projectTestDirectory);
+                    DotNet($"new {templateArgument:nq} --name TestLibrary --force", workingDirectory: projectTestDirectory);
 
                     // Build the generated project to ensure it compiles without errors
                     // Note: template uses preferNameDirectory=true, so project is created in TestLibrary subdirectory
                     var actualProjectDirectory = projectTestDirectory / "TestLibrary";
 
                     DotNet("build", workingDirectory: actualProjectDirectory);
-                    Information("Successfully built project from template: {Template}", templateName);
+                    Information("Successfully built project from template: {Template}", templateArgument);
 
                     // Check if the basic project structure was created correctly
                     if ((actualProjectDirectory / $"TestLibrary.slnx").FileExists() ||
                         (actualProjectDirectory / $"TestLibrary").DirectoryExists())
                     {
-                        Information("Project structure was created successfully for template: {Template}", templateName);
+                        Information("Project structure was created successfully for template: {Template}", templateArgument);
                     }
                     else
                     {
-                        Error($"Template {templateName} failed to create proper project structure");
+                        Error($"Template {templateArgument} failed to create proper project structure");
                     }
 
-                    AssertDependencyUpdater(actualProjectDirectory, expectDependabot: true);
+                    if (isAzdo)
+                    {
+                        AssertAzdoReplacements(actualProjectDirectory, "TestOrganization", "TestProject");
+                    }
+                    else
+                    {
+                        AssertDependencyUpdater(actualProjectDirectory, expectDependabot: true);
+                    }
                 }
 
                 // Verify that choosing Renovate replaces the Dependabot configuration
@@ -415,8 +436,7 @@ class Build : FalloutBuild
         .DependsOn(PrepareTemplateReadmes)
         .Executes(() =>
         {
-            string[] names = ["Normal", "SourceOnly", "NormalOss", "SourceOnlyOss", "NormalAzdo", "SourceOnlyAzdo"];
-            foreach (string name in names)
+            foreach (string name in TemplateVariantNames)
             {
                 var templateDirectory = ArtifactsDirectory / "templates" / name;
 
@@ -462,6 +482,17 @@ class Build : FalloutBuild
         Assert.True(hasDependabot == expectDependabot && hasRenovate != expectDependabot,
             $"Expected only {(expectDependabot ? "dependabot.yml" : "renovate.json")} in {projectDirectory}, " +
             $"but found dependabot.yml={hasDependabot} and renovate.json={hasRenovate}");
+    }
+
+    static void AssertAzdoReplacements(AbsolutePath projectDirectory, string organization, string project)
+    {
+        // Build/Build.cs is present in both the normal and source-only Azdo variants, unlike the main .csproj,
+        // whose "Package info" property group (which contains the RepositoryUrl) is only rendered for non-source-only.
+        var buildScriptFile = projectDirectory / "Build" / "Build.cs";
+        string content = buildScriptFile.ReadAllText();
+
+        Assert.True(content.Contains($"{organization}/{project}", StringComparison.Ordinal),
+            $"Expected {buildScriptFile} to reference organization '{organization}' and project '{project}'");
     }
 
     bool IsPullRequest =>GitHubActions?.IsPullRequest ?? false;

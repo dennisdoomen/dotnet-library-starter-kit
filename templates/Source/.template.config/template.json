@@ -62,7 +62,7 @@
         "replaces": "MyOrganization",
         "isRequired": true
       },
-      "project": {
+      "projectName": {
         "type": "parameter",
         "dataType": "string",
         "defaultValue": "MyProject",

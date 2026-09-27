@@ -119,11 +119,11 @@ dotnet new update
     If you are still using Azure DevOps, we got you covered, but you need the organization and project names as well. Again, choose between a binary package or a source-only package.
 
     ```
-   dotnet new azdo-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
+   dotnet new azdo-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --projectName MyDevOpsProject
     ```
 
     ```
-   dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --project MyDevOpsProject
+   dotnet new azdo-source-only-nuget-class-library-sln --name TheNameOfYourAwesomeLibrary --organization MyDevOpsOrganization --projectName MyDevOpsProject
     ```
 
     The GitHub templates use [Dependabot](https://docs.github.com/en/code-security/dependabot) to keep the NuGet packages and GitHub Actions up-to-date. If you prefer [Renovate](https://docs.renovatebot.com/), add `--dependency-updater renovate`. You get a `.github/renovate.json` instead of `.github/dependabot.yml`, so you don't get duplicate pull requests. It groups related updates (such as all analyzers or all xUnit packages) into one pull request, updates the .NET SDK in `global.json`, and automatically merges patch updates of analyzers, test and build packages.
