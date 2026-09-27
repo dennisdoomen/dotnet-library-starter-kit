@@ -126,7 +126,7 @@ $generated = Join-Path ([System.IO.Path]::GetTempPath()) "starterkit-$Name-$([Gu
 
 $templateArguments = @("new", $Template, "--name", $Name, "--output", $generated)
 if ($Organization) { $templateArguments += @("--organization", $Organization) }
-if ($Project) { $templateArguments += @("--project", $Project) }
+if ($Project) { $templateArguments += @("--projectName", $Project) }
 
 Write-Host "Generating '$Template' for '$Name' into $generated"
 & dotnet @templateArguments | Out-Null
