@@ -184,13 +184,13 @@ if ($solutions.Count -eq 0) {
     $FollowUps.Add("No solution was found, so $Name.slnx was copied from the template. Make sure its project paths match your repository.")
 }
 elseif ($solutions.Count -gt 1) {
-    $FollowUps.Add("Found more than one solution file. Update .nuke/parameters.json and the InspectCode call in Build/Build.cs to point to the one the build should use.")
+    $FollowUps.Add("Found more than one solution file. Update .fallout/parameters.json and the InspectCode call in Build/Build.cs to point to the one the build should use.")
 }
 else {
     $solution = $solutions[0]
 
     if ($solution.Name -ne "$Name.slnx") {
-        foreach ($file in @(".nuke/parameters.json", "Build/Build.cs") | Where-Object { $copied -contains $_ }) {
+        foreach ($file in @(".fallout/parameters.json", "Build/Build.cs") | Where-Object { $copied -contains $_ }) {
             $fullPath = Join-Path $Path $file
             if ($PSCmdlet.ShouldProcess($file, "Point to $($solution.Name)")) {
                 (Get-Content $fullPath -Raw).Replace("`"$Name.slnx", "`"$($solution.Name)") |
