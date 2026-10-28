@@ -31,11 +31,24 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        global-json-file: global.json
+
+    - name: Setup Java (required by SonarCloud's scanner)
+      uses: actions/setup-java@v5
+      if: ${{ secrets.SONAR_TOKEN != '' }}
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
     - name: Run Fallout
       run: ./build.ps1
       env:
         NuGetApiKey: ${{ secrets.NUGETAPIKEY }}
         GitHubApiKey: ${{ secrets.GITHUB_TOKEN }}
+        SonarToken: ${{ secrets.SONAR_TOKEN }}
 
     - name: Check for 'lcov.info' existence
       id: check_files
