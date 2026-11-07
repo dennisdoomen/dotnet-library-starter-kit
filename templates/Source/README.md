@@ -75,6 +75,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 <!--#if (benchmarks) -->
 * Replace the example benchmark in `MyPackage.Benchmarks` with benchmarks for your library and run them using `build.ps1 RunBenchmarks`
 <!--#endif -->
+* Run `build.ps1 RunMutationTests` to see how well your tests catch bugs, and tighten the thresholds in `stryker-config.json` over time
 * Study the Fallout `build.cs` file or invoking it through `build.ps1 -plan` to see how it works
 * See if all dependencies are up-to-date
 * Configure NuGet auditing (see next paragraph)
