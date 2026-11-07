@@ -92,7 +92,7 @@ The script contains no hard-coded list of template files. Whatever the installed
    | AI coding guidelines     | `.agents/`                                                                                          |
    | Packaging                | `PackageIcon.png`, `PackageReadme.md`                                                               |
    | Git settings             | `.gitattributes`, `.gitignore`                                                                      |
-   | Documentation            | `README.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `LICENSE` (only if you don't have them yet)   |
+   | Documentation            | `README.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `LICENSE` (only if you don't have them yet)   |
 
    Don't copy the library project folder, the `.Specs` folder or the solution file. Instead, compare them with your own and take over what you need.
 
