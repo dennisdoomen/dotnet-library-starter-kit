@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/src/Stryker.Core/Stryker.Core/stryker-config.schema.json",
+  "stryker-config": {
+    "test-projects": [ "MyPackage.Specs/MyPackage.Specs.csproj" ],
+    "project": "MyPackage.csproj",
+    "target-framework": "net10.0",
+    "reporters": [ "html", "progress" ],
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 0
+    }
+  }
+}

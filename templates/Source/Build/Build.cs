@@ -233,6 +233,19 @@ class Build : FalloutBuild
         });
 
 //#endif
+    AbsolutePath MutationResultsDirectory => ArtifactsDirectory / "Mutation";
+
+    // Not part of the Default target on purpose. Mutation testing takes many times longer than running the tests.
+    // Thresholds and the target framework are configured in stryker-config.json.
+    Target RunMutationTests => _ => _
+        .Executes(() =>
+        {
+            DotNet("tool restore", workingDirectory: RootDirectory);
+            DotNet($"dotnet-stryker --output {MutationResultsDirectory}", workingDirectory: RootDirectory);
+
+            Information("Mutation report: {directory}", MutationResultsDirectory / "reports");
+        });
+
     Target ScanPackages => _ => _
         .DependsOn(Compile)
         .Executes(() =>
