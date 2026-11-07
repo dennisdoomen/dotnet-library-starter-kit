@@ -98,6 +98,10 @@ class Build : FalloutBuild
     [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.exe")]
     Tool InspectCode;
 
+    // The .exe only runs on Windows. The package ships a shell script as the cross-platform entry point.
+    [NuGetPackage("JetBrains.ReSharper.GlobalTools", "inspectcode.sh")]
+    Tool InspectCodeUnix;
+
     string SemVer;
 
     Target CalculateNugetVersion => _ => _
@@ -172,7 +176,16 @@ class Build : FalloutBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            InspectCode($"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build --dotnetcoresdk=10.0.100");
+            var arguments = $"MyPackage.slnx -o={ArtifactsDirectory / "CodeIssues.sarif"} --no-build --dotnetcoresdk=10.0.100";
+
+            if (OperatingSystem.IsWindows())
+            {
+                InspectCode(arguments);
+            }
+            else
+            {
+                InspectCodeUnix(arguments);
+            }
         });
 
     Target RunTests => _ => _
@@ -192,7 +205,8 @@ class Build : FalloutBuild
                 .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
                 .SetResultsDirectory(TestResultsDirectory)
                 .SetProjectFile(project)
-                .CombineWith(project.GetTargetFrameworks(),
+                // The .NET Framework tests can only run on Windows
+                .CombineWith(project.GetTargetFrameworks().Where(framework => OperatingSystem.IsWindows() || !framework.StartsWith("net4")),
                     (ss, framework) => ss
                         .SetFramework(framework)
                         .AddLoggers($"trx;LogFileName={framework}.trx")
