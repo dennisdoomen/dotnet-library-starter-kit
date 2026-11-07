@@ -56,6 +56,9 @@ The template makes a lot of assumptions, so after generating the project, there'
 {{~ if !azdo ~}}
 * Review the issue templates under `.github/issue_template`
 * Set-up labels in GitHub matching those in the `release.yml` so you can label pull requests accordingly
+{{~ if open_source ~}}
+* Enable [private vulnerability reporting](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository) in the repository settings, so the reporting channel in `SECURITY.md` works
+{{~ end ~}}
 * This repository includes a CodeQL workflow (`.github/workflows/codeql.yml`) that scans for security vulnerabilities. On private repositories, this requires [GitHub Advanced Security](https://docs.github.com/en/get-started/learning-about-github/about-github-advanced-security) to be enabled. If that's not available to you, either make the repository public or remove the workflow file
 {{~ end ~}}
 * Adjust the .NET frameworks this library should target
