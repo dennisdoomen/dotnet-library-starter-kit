@@ -23,10 +23,7 @@
     <readme>Readme.md</readme>
   </metadata>
   <files>
-    <file src="*.cs" target="contentFiles/cs/net8.0/MyPackage/"/>
-    <file src="*.cs" target="contentFiles/cs/net4.7/MyPackage/"/>
-    <file src="*.cs" target="contentFiles/cs/netstandard2.0/MyPackage/"/>
-    <file src="*.cs" target="contentFiles/cs/netstandard2.1/MyPackage/"/>
+    <file src="*.cs" target="contentFiles/cs/any/MyPackage/"/>
     <!-- 👇 Hide content files from Visual Studio solution explorer  -->
     <file src="MyPackage.props" target="build/MyPackage.props" />
     <file src="..\PackageIcon.png" target="PackageIcon.png" />

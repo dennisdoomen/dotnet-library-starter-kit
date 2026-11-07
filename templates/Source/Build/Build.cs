@@ -365,6 +365,58 @@ class Build : FalloutBuild
                 .SetVersion(SemVer));
         });
 
+    // Restores the packed package from a local feed into a consumer project that targets the same frameworks
+    // as the package, so that a package that only works on some of them is caught before it is published.
+    Target SmokeTestPackage => _ => _
+        .DependsOn(Pack)
+        .Executes(() =>
+        {
+            var smokeTestDirectory = ArtifactsDirectory / "SmokeTest";
+            smokeTestDirectory.CreateOrCleanDirectory();
+
+            // Keep the repository's Directory.Build.* files (analyzers, warnings as errors) out of the consumer
+            (smokeTestDirectory / "Directory.Build.props").WriteAllText("<Project />");
+            (smokeTestDirectory / "Directory.Build.targets").WriteAllText("<Project />");
+
+            (smokeTestDirectory / "nuget.config").WriteAllText($"""
+                <configuration>
+                  <packageSources>
+                    <clear />
+                    <add key="local" value="{ArtifactsDirectory}" />
+                    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+                  </packageSources>
+                </configuration>
+                """);
+
+            var frameworks = string.Join(';', Solution.GetProject("MyPackage").GetTargetFrameworks());
+
+            (smokeTestDirectory / "SmokeTest.csproj").WriteAllText($"""
+                <Project Sdk="Microsoft.NET.Sdk">
+                  <PropertyGroup>
+                    <TargetFrameworks>{frameworks}</TargetFrameworks>
+                    <LangVersion>latest</LangVersion>
+                  </PropertyGroup>
+                  <ItemGroup>
+                    <PackageReference Include="MyPackage" Version="{SemVer}" />
+                  </ItemGroup>
+                </Project>
+                """);
+
+            (smokeTestDirectory / "Consumer.cs").WriteAllText("""
+                public static class Consumer
+                {
+                    public static object Create() => new MyPackage.MyClass();
+                }
+                """);
+
+            DotNetBuild(s => s
+                .SetProjectFile(smokeTestDirectory / "SmokeTest.csproj")
+                .SetConfiguration(Configuration)
+                .EnableNoLogo()
+                // Don't let a previously restored version of the package hide a broken one
+                .SetProcessEnvironmentVariable("NUGET_PACKAGES", smokeTestDirectory / "packages"));
+        });
+
 {{~ if azdo ~}}
     Target UploadPackageAsPipelineArtifact => _ => _
         .OnlyWhenStatic(() => Host is AzurePipelines)
@@ -388,6 +440,7 @@ class Build : FalloutBuild
         .DependsOn(UploadPackageAsPipelineArtifact)
 {{~ end ~}}
         .DependsOn(Pack)
+        .DependsOn(SmokeTestPackage)
         .OnlyWhenDynamic(() => IsTag)
         .ProceedAfterFailure()
         .Executes(() =>
@@ -407,6 +460,7 @@ class Build : FalloutBuild
 
     Target Default => _ => _
 		.DependsOn(Pack)
+		.DependsOn(SmokeTestPackage)
 {{~ if azdo ~}}
 		.DependsOn(UploadPackageAsPipelineArtifact)
 {{~ end ~}}
