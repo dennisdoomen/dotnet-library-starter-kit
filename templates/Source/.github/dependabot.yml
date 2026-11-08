@@ -7,11 +7,44 @@ updates:
       day: "monday"
       time: "16:00"
       timezone: "Europe/Copenhagen"
+    cooldown:
+      default-days: 3
 
+  # Test projects, build project and Roslyn analyzers (Directory.Build.props), combined into
+  # a single PR on the 1st and 15th of each month (Dependabot has no "biweekly" interval).
   - package-ecosystem: "nuget"
-    directory: "/"
+    directories:
+      - "/"
+      - "/Build"
+      - "/MyPackage.Specs"
+      - "/MyPackage.ApiVerificationTests"
+      - "/MyPackage.Benchmarks"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "16:00"
+      interval: "cron"
+      cronjob: "0 16 1,15 * *"
       timezone: "Europe/Copenhagen"
+    cooldown:
+      default-days: 3
+    groups:
+      test-and-dev-dependencies:
+        patterns:
+          - "*"
+
+  # The library project itself. Any package it references is part of its public contract:
+  # updating it forces consumers to update too, so Dependabot must not touch it. Only the
+  # private PolySharp development dependency is allowed through.
+  # Keep this list free of the packages your library exposes to consumers.
+  - package-ecosystem: "nuget"
+    directory: "/MyPackage"
+    allow:
+      - dependency-name: "PolySharp"
+    schedule:
+      interval: "cron"
+      cronjob: "0 16 1,15 * *"
+      timezone: "Europe/Copenhagen"
+    cooldown:
+      default-days: 3
+    groups:
+      test-and-dev-dependencies:
+        patterns:
+          - "*"
