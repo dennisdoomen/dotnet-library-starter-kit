@@ -62,6 +62,11 @@
   </ItemGroup>
 {{~ end ~}}
 
+  <ItemGroup Label="Reference assemblies">
+    <!-- Allows building the net47 target on Linux and macOS -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
   <ItemGroup Label="Internals visible to">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>MyPackage.Specs</_Parameter1>

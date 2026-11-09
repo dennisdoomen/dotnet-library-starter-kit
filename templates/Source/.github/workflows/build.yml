@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: "Build, Test, Analyze and Publish"
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       DOTNET_NOLOGO: false
@@ -44,7 +44,7 @@ jobs:
         java-version: '17'
 
     - name: Run Fallout
-      run: ./build.ps1
+      run: ./build.sh
       env:
         NuGetApiKey: ${{ secrets.NUGETAPIKEY }}
         GitHubApiKey: ${{ secrets.GITHUB_TOKEN }}
@@ -99,14 +99,42 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: windows-artifacts
+        name: linux-artifacts
         path: |
           ./Artifacts/*
           ./TestResults/*.trx
 
+  test-net-framework:
+    name: "Test on Windows"
+    runs-on: windows-latest
+
+    env:
+      DOTNET_NOLOGO: false
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        global-json-file: global.json
+
+    # Only Windows can run the .NET Framework tests. Publishing and analysis happen in the Linux job.
+    - name: Run Fallout
+      run: ./build.ps1 --target RunTests
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: windows-test-results
+        path: ./TestResults/*.trx
+
   publish-test-results:
     name: "Publish Tests Results"
-    needs: [ build ]
+    needs: [ build, test-net-framework ]
     runs-on: ubuntu-latest
     permissions:
       checks: write
