@@ -53,6 +53,7 @@ The template makes a lot of assumptions, so after generating the project, there'
 
 * Update the `Readme.md` with information about your library. Note that `PackageReadme.md` is automatically generated from it during the build
 * Review the guidelines in `CONTRIBUTING.md` to see if it aligns with how you want to handle contributions
+* Review the instructions for AI coding agents in `AGENTS.md` and keep them in sync with `CONTRIBUTING.md`
 {{~ if !azdo ~}}
 * Review the issue templates under `.github/issue_template`
 * Set-up labels in GitHub matching those in the `release.yml` so you can label pull requests accordingly

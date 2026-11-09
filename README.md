@@ -59,6 +59,7 @@ It includes:
 * A test project using [xUnit](https://xunit.net/) and [Fluent Assertions 7](https://fluentassertions.com/)
 * Validation of the public API of the library against snapshots using [Verify](https://github.com/VerifyTests/Verify)
 * NuGet auditing using .NET built-in auditing capabilities
+* Instructions for AI coding agents in an `AGENTS.md` file, plus the [C# coding guidelines](https://csharpcodingguidelines.com/) as an agent skill under `.agents/skills`
 * An optional benchmark project using [BenchmarkDotNet](https://benchmarkdotnet.org/)
 * NuGet package and licensing scanning through [PackageGuard](https://github.com/dennisdoomen/packageguard?tab=readme-ov-file#readme), including a package risk report uploaded to GitHub code scanning and a CycloneDX Software Bill of Materials (SBOM) attested alongside the NuGet package
 

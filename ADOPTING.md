@@ -89,7 +89,7 @@ The script contains no hard-coded list of template files. Whatever the installed
    | API verification         | `<Name>.ApiVerificationTests/` without the `ApprovedApi` folder, `AcceptApiChanges.ps1`, `AcceptApiChanges.sh` |
    | Pipelines                | `.github/` (GitHub) or `Build/azure-pipelines.yaml` (Azure DevOps)                                  |
    | Package scanning         | `.packageguard/`                                                                                    |
-   | AI coding guidelines     | `.agents/`                                                                                          |
+   | AI coding guidelines     | `.agents/`, `AGENTS.md`                                                                             |
    | Packaging                | `PackageIcon.png`, `PackageReadme.md`                                                               |
    | Git settings             | `.gitattributes`, `.gitignore`                                                                      |
    | Documentation            | `README.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `LICENSE` (only if you don't have them yet)   |
