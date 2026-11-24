@@ -58,6 +58,7 @@ It includes:
 * Customized release notes templates for GitHub connected to pull requests labels.
 * A test project using [xUnit](https://xunit.net/) and [Fluent Assertions 7](https://fluentassertions.com/)
 * Validation of the public API of the library against snapshots using [Verify](https://github.com/VerifyTests/Verify)
+* Optional mutation testing using [Stryker.NET](https://stryker-mutator.io/docs/stryker-net/introduction/), through the `RunMutationTests` build target
 * NuGet auditing using .NET built-in auditing capabilities
 * An optional benchmark project using [BenchmarkDotNet](https://benchmarkdotnet.org/)
 * NuGet package and licensing scanning through [PackageGuard](https://github.com/dennisdoomen/packageguard?tab=readme-ov-file#readme), including a package risk report uploaded to GitHub code scanning and a CycloneDX Software Bill of Materials (SBOM) attested alongside the NuGet package
@@ -135,6 +136,7 @@ dotnet new update
     Renovate only works after you install the [Renovate GitHub App](https://github.com/apps/renovate) on your repository or organization. That is why Dependabot is the default. The Azure DevOps templates do not have this option.
 
 1. Optionally, add `--benchmarks true` to any of these commands to include a [BenchmarkDotNet](https://benchmarkdotnet.org/) project with an example benchmark. You can run the benchmarks using `build.ps1 RunBenchmarks`. This target is never part of the normal build, because benchmarks are slow and their results are not reliable on shared CI agents.
+1. Optionally, run `build.ps1 RunMutationTests` to find out which code changes your tests fail to catch, using [Stryker.NET](https://stryker-mutator.io/docs/stryker-net/introduction/). This target is never part of the normal build, because mutation testing is slow. It only mutates the `net10.0` build to keep the run time down, and uses lenient thresholds in `stryker-config.json` that you can tighten over time.
 1. Make the necessary changes to the generated code (see next section)
 1. Commit the changes to your repository into a new commit. Without it, the build script will crash on generating the version number.
 1. Run `build.ps1` to build the code, run the tests, and package the library into a NuGet package in the `Artifacts` directory.

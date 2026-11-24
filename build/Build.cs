@@ -344,6 +344,13 @@ class Build : FalloutBuild
                     DotNet("build", workingDirectory: actualProjectDirectory);
                     Information("Successfully built project from template: {Template}", templateArgument);
 
+                    if (templateArgument == "oss-nuget-class-library-sln")
+                    {
+                        Pwsh("-NoProfile -File ./build.ps1 RunMutationTests", workingDirectory: actualProjectDirectory);
+                        Assert.True((actualProjectDirectory / "Artifacts" / "Mutation" / "reports" / "mutation-report.html").FileExists(),
+                            "Mutation testing did not generate an HTML report");
+                    }
+
                     // Check if the basic project structure was created correctly
                     if ((actualProjectDirectory / $"TestLibrary.slnx").FileExists() ||
                         (actualProjectDirectory / $"TestLibrary").DirectoryExists())
