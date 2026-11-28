@@ -50,7 +50,7 @@
     {{~ if open_source ~}}
     <None Include="..\LICENSE" Pack="true" PackagePath=""/>
     {{~ end ~}}
-    <None Include="..\PackageReadme.md" Pack="true" PackagePath="Readme.md"/>
+    <None Include="..\Artifacts\Readme.md" Pack="true" PackagePath="Readme.md"/>
   </ItemGroup>
 {{~ if !source_only ~}}
 
