@@ -27,7 +27,7 @@
     <!-- 👇 Hide content files from Visual Studio solution explorer  -->
     <file src="MyPackage.props" target="build/MyPackage.props" />
     <file src="..\PackageIcon.png" target="PackageIcon.png" />
-    <file src="..\PackageReadme.md" target="Readme.md" />
+    <file src="..\Artifacts\Readme.md" target="Readme.md" />
   </files>
 </package>
 {{ end }}
