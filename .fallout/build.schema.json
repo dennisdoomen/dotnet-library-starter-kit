@@ -30,7 +30,6 @@
         "DownloadCSharpGuidelinesSkills",
         "Pack",
         "PreparePackageReadme",
-        "PrepareTemplateReadmes",
         "PrepareTemplates",
         "Push",
         "TestPackageInstallation",

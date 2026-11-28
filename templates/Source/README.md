@@ -1,4 +1,3 @@
-{{ if !package_readme }}
 <h1 align="center">
   <br>
   MyPackage
@@ -44,15 +43,14 @@
 
 </div>
 
-{{ end ~}}
-
 > [!TIP]
 > What to do next after generating the template
 
 The template makes a lot of assumptions, so after generating the project, there's a couple of things you can tweak.
 
-* Update the `Readme.md` with information about your library. Note that `PackageReadme.md` is automatically generated from it during the build
+* Update the `Readme.md` with information about your library. Note that the readme of the NuGet package (`Artifacts/Readme.md`) is automatically generated from it during the build
 * Review the guidelines in `CONTRIBUTING.md` to see if it aligns with how you want to handle contributions
+* Review the instructions for AI coding agents in `AGENTS.md` and keep them in sync with `CONTRIBUTING.md`
 {{~ if !azdo ~}}
 * Review the issue templates under `.github/issue_template`
 * Set-up labels in GitHub matching those in the `release.yml` so you can label pull requests accordingly
@@ -163,7 +161,6 @@ Or, if you have, the [Fallout tool installed](https://fallout.build/):
 
 Also try using `--help` to see all the available options or `--plan` to see what the scripts does.
 
-{{~ if !package_readme ~}}
 ## Contributing
 
 Your contributions are always welcome! Please have a look at the [contribution guidelines](CONTRIBUTING.md) first.
@@ -176,7 +173,6 @@ Previous contributors include:
 </a>
 
 (Made with [contrib.rocks](https://contrib.rocks))
-{{~ end ~}}
 {{~ end ~}}
 
 ## Versioning
@@ -206,7 +202,6 @@ This library wouldn't have been possible without the following tools, packages a
 * [Buy me a Coffee](https://ko-fi.com/your-github-username)
 * [Patreon](https://patreon.com/your-patreon-username)
 
-{{~ if !package_readme ~}}
 ## You may also like
 
 * Your blog
@@ -215,5 +210,4 @@ This library wouldn't have been possible without the following tools, packages a
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-{{ end -}}
 {{ end -}}

@@ -132,24 +132,6 @@ class Build : FalloutBuild
             }
         });
 
-    Target PrepareTemplateReadmes => _ => _
-        .DependsOn(PrepareTemplates)
-        .Executes(() =>
-        {
-
-            string readmeTemplate = (RootDirectory / "templates" / "Source" / "README.md").ReadAllText();
-            var template = Template.Parse(readmeTemplate);
-            var readmeContents = template.Render(new
-            {
-                PackageReadme = true,
-            });
-
-            foreach (string name in TemplateVariantNames)
-            {
-                (ArtifactsDirectory / "templates" / name / "PackageReadme.md").WriteAllText(readmeContents);
-            }
-        });
-
     Target DownloadCSharpGuidelinesSkills => _ => _
         .DependsOn(PrepareTemplates)
         .Executes(async () =>
@@ -210,7 +192,6 @@ class Build : FalloutBuild
 
     Target Compile => _ => _
         .DependsOn(CalculateNugetVersion)
-        .DependsOn(PrepareTemplateReadmes)
         .DependsOn(DownloadCSharpGuidelinesSkills)
         .Executes(() =>
         {
@@ -440,7 +421,6 @@ class Build : FalloutBuild
 
     Target TestTemplateBuild => _ => _
         .DependsOn(Pack)
-        .DependsOn(PrepareTemplateReadmes)
         .Executes(() =>
         {
             foreach (string name in TemplateVariantNames)
